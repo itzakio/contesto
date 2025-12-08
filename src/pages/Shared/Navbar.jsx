@@ -77,8 +77,12 @@ const Navbar = () => {
               {/* theme toggle button */}
               <label className="toggle text-base-content">
                 <input
-                  onClick={(e) => themeHandler(e.target.checked)}
-                  defaultChecked={theme === "dark" ? true : false}
+                  checked={theme === "dark"}
+                  onChange={(e) =>
+                    setTheme(e.target.checked ? "dark" : "light")
+                  }
+                  // onClick={(e) => themeHandler(e.target.checked)}
+                  // defaultChecked={theme === "dark" ? true : false}
                   type="checkbox"
                   value="synthwave"
                   className="theme-controller"
@@ -153,6 +157,12 @@ const Navbar = () => {
                 Login
               </Link>
             )} */}
+               <Link
+                to="/login"
+                className="btn rounded-full py-2 px-3 font-medium bg-primary text-white"
+              >
+                Login
+              </Link>
           </div>
           <RiMenuFill
             onClick={() => setShow(!show)}

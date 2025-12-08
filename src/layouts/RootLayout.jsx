@@ -8,7 +8,7 @@ const RootLayout = () => {
   useEffect(() => {
     AOS.init({
       duration: 700,
-      once: true,
+      once: false,
       easing: "ease-out-cubic",
     });
   }, []);

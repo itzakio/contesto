@@ -4,10 +4,13 @@ import './index.css'
 import 'aos/dist/aos.css' 
 import { RouterProvider } from 'react-router'
 import router from './routes/router'
+import ThemeProvider from './Components/ThemeProvider'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+   <ThemeProvider>
+     <RouterProvider router={router}/>
+   </ThemeProvider>
   </StrictMode>,
 )

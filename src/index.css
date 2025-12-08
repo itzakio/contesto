@@ -49,4 +49,10 @@ nav a.active {
   @apply text-primary;
 }
 
+.footer-link {
+  @apply hover:translate-x-2 text-accent transition-all duration-100 cursor-pointer;
+}
+.title-footer{
+  @apply text-xl mb-2 font-semibold text-primary
+}
 
