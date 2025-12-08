@@ -17,6 +17,31 @@ const Register = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
+
+
+   const googleSignInHandler = () => {
+    console.log("google login clicked");
+    googleSignIn()
+      .then((result) => {
+        console.log(result.user);
+
+        // create user in database
+        const user_info = {
+          email: result.user.email,
+          name: result.user.displayName,
+          photo_url: result.user.photoURL,
+        };
+        // axiosSecure.post("/users", user_info).then((res) => {
+        //   if (res.data.insertedId) {
+        //     console.log("user created in database");
+        //   }
+        // });
+        navigate(location.state ? location.state : "/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div className=" card w-full margin-y -mb-10 max-w-sm shrink-0 mx-auto">
       <div className="card-body">
@@ -104,7 +129,7 @@ const Register = () => {
         <p className="text-center text-base">or</p>
         <div className="flex flex-col items-center">
           <button
-            // onClick={googleSignInHandler}
+            onClick={googleSignInHandler}
             className="flex items-center justify-center gap-1 cursor-pointer active:scale-98  w-full btn bg-gray-200"
           >
             <FcGoogle size={16} /> <span>Register with Google</span>

@@ -7,8 +7,10 @@ import { RiBookShelfFill, RiMenuFill } from "react-icons/ri";
 import { Link, NavLink } from "react-router";
 import logo from "/logo.png";
 import { RxCrossCircled } from "react-icons/rx";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
+  const {user, logOutHandler} = useAuth();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [show, setShow] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
@@ -129,7 +131,7 @@ const Navbar = () => {
                 </svg>
               </label>
             </div>
-            {/* <div>
+            <div>
               {user && user.photoURL ? (
                 <img
                   onClick={() => setShow(!show)}
@@ -156,13 +158,8 @@ const Navbar = () => {
               >
                 Login
               </Link>
-            )} */}
-               <Link
-                to="/login"
-                className="btn rounded-full py-2 px-3 font-medium bg-primary text-white"
-              >
-                Login
-              </Link>
+            )}
+              
           </div>
           <RiMenuFill
             onClick={() => setShow(!show)}
@@ -236,7 +233,7 @@ const Navbar = () => {
             </svg>
           </label>
         </div>
-        {/* <div className="flex flex-col gap-4 items-center">
+        <div className="flex flex-col gap-4 items-center">
           <div>
             {user ? (
               <img
@@ -276,7 +273,7 @@ const Navbar = () => {
           >
             Logout
           </button>
-        )} */}
+        )}
       </aside>
     </nav>
   );
