@@ -41,6 +41,7 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/">
         Home
       </NavLink>
+
       <NavLink className="nav-links" to="/all-contests">
         All Contests
       </NavLink>
@@ -64,7 +65,7 @@ const Navbar = () => {
           </div>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 hidden xl:flex font-semibold ">
+          <ul className="menu menu-horizontal hidden xl:flex font-semibold gap-4 ">
             {links}
             {/* main links */}
           </ul>
@@ -73,7 +74,6 @@ const Navbar = () => {
         <div className=" navbar-end flex items-center gap-2">
           <div className="hidden lg:flex items-center gap-2">
             <div>
-
               {/* theme toggle button */}
               <label className="toggle text-base-content">
                 <input
@@ -124,7 +124,6 @@ const Navbar = () => {
                   </g>
                 </svg>
               </label>
-
             </div>
             {/* <div>
               {user && user.photoURL ? (
