@@ -1,7 +1,8 @@
 import React from "react";
-import logo from '/logo.png'
-import contestoImg from '../assets/contesto.jpeg'
+import logo from "/logo.png";
+import contestoImg from "../assets/contesto.jpeg";
 import { Link, Outlet } from "react-router";
+import { Toaster } from "react-hot-toast";
 
 const AuthLayout = () => {
   return (
@@ -26,6 +27,7 @@ const AuthLayout = () => {
           <img src={contestoImg} alt="authImage" />
         </div>
       </section>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

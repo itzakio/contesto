@@ -5,38 +5,72 @@ import { HiEye, HiEyeOff } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const Login = () => {
-    const { logInUser, googleSignIn } = useAuth();
+  const { logInUser, googleSignIn, setUser } = useAuth();
   const [show, setShow] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
-const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
-    const loginHandler = (data) =>{
-      console.log(data);
-      logInUser(data.email, data.password)
-      .then(result =>{
-        console.log(result.user);
-        navigate(location.state?location.state: "/")
+  const loginHandler = (data) => {
+    console.log(data);
+    logInUser(data.email, data.password)
+      .then((result) => {
+        const user = result.user;
+        setUser(user);
+        toast.success("Logged In Successfully!");
+        navigate(location.state ? location.state : "/");
       })
-      .catch(error =>{
-        console.log(error)
-      })
-    }
+      .catch((error) => {
+        if (error.code === "auth/invalid-email") {
+          toast.error("Invalid email address. Please check and try again.");
+        } else if (error.code === "auth/missing-password") {
+          toast.error("Please enter your password to continue.");
+        } else if (error.code === "auth/user-not-found") {
+          toast.error(
+            "No account found with this email. Please sign up first."
+          );
+        } else if (error.code === "auth/wrong-password") {
+          toast.error("Incorrect password. Please try again.");
+        } else if (error.code === "auth/invalid-credential") {
+          toast.error(
+            "This email is not registered or the password is incorrect."
+          );
+        } else if (error.code === "auth/too-many-requests") {
+          toast.error(
+            "Too many failed attempts. Try again later or reset your password."
+          );
+        } else if (error.code === "auth/network-request-failed") {
+          toast.error("Network error. Please check your internet connection.");
+        } else if (error.code === "auth/popup-closed-by-user") {
+          toast.error("Sign-in popup was closed before completion.");
+        } else if (error.code === "auth/operation-not-allowed") {
+          toast.error(
+            "This sign-in method is currently disabled. Please contact support."
+          );
+        } else {
+          toast.error(
+            error.message || "Something went wrong. Please try again."
+          );
+        }
+      });
+  };
 
-
-    const googleSignInHandler = () => {
+  const googleSignInHandler = () => {
     console.log("google login clicked");
     googleSignIn()
       .then((result) => {
-        console.log(result.user);
+        const user = result.user;
+        setUser(user);
+        toast.success("Logged In Successfully!");
 
         // create user in database
         const user_info = {
@@ -52,7 +86,7 @@ const axiosSecure = useAxiosSecure();
         navigate(location.state ? location.state : "/");
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.message || "Something went wrong. Please try again.");
       });
   };
 
@@ -60,7 +94,6 @@ const axiosSecure = useAxiosSecure();
     <div className=" card w-full margin-y max-w-sm shrink-0 mx-auto">
       <div className="card-body">
         <form onSubmit={handleSubmit(loginHandler)}>
-          
           <h3 className="text-4xl font-extrabold mb-2">Welcome Back</h3>
           <p className="text-lg mb-4">Login with Contesto</p>
           <fieldset className="fieldset">

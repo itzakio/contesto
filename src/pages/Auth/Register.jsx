@@ -6,11 +6,12 @@ import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 
 const Register = () => {
   const [show, setShow] = useState(false);
-  const { registerUser, userProfileUpdate, googleSignIn } = useAuth();
+  const { registerUser, userProfileUpdate, googleSignIn, setUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 const axiosSecure = useAxiosSecure();
@@ -62,8 +63,38 @@ const axiosSecure = useAxiosSecure();
         navigate(location.state ? location.state : "/");
         console.log(result.user);
       })
-      .catch((error) => {
-        console.log(error);
+       .catch((error) => {
+        if (error.code === "auth/email-already-in-use") {
+          toast.error(
+            "This email is already registered. Try logging in instead."
+          );
+        } else if (error.code === "auth/invalid-email") {
+          toast.error("Invalid email address. Please check and try again.");
+        } else if (error.code === "auth/weak-password") {
+          toast.error(
+            "Password is too weak. Use at least 6 characters with a upperCase and a lowerCase letters and numbers."
+          );
+        } else if (error.code === "auth/missing-password") {
+          toast.error("Please enter a password before proceeding.");
+        } else if (error.code === "auth/user-not-found") {
+          toast.error(
+            "No account found with this email. Please sign up first."
+          );
+        } else if (error.code === "auth/wrong-password") {
+          toast.error("Incorrect password. Please try again.");
+        } else if (error.code === "auth/too-many-requests") {
+          toast.error("Too many failed attempts. Please try again later.");
+        } else if (error.code === "auth/network-request-failed") {
+          toast.error("Network error. Please check your internet connection.");
+        } else if (error.code === "auth/popup-closed-by-user") {
+          toast.error("Sign-in popup was closed before completion.");
+        } else if (error.code === "auth/operation-not-allowed") {
+          toast.error("This sign-in method is not enabled in Firebase.");
+        } else {
+          toast.error(
+            error.message || "Something went wrong. Please try again."
+          );
+        }
       });
   };
 
@@ -71,24 +102,15 @@ const axiosSecure = useAxiosSecure();
     console.log("google login clicked");
     googleSignIn()
       .then((result) => {
-        console.log(result.user);
-
+         const user = result.user;
+        setUser(user);
+        toast.success("User Registered successfully");
         // create user in database
         const user_info = {
           email: result.user.email,
           name: result.user.displayName,
           photo_url: result.user.photoURL,
         };
-        // axiosSecure.post("/users", user_info).then((res) => {
-        //   if (res.data.insertedId) {
-        //     console.log("user created in database");
-        //   }
-        // });
-        axiosSecure.post("/users", user_info).then((res) => {
-          if (res.data.insertedId) {
-            console.log("user created in database");
-          }
-        });
         axiosSecure.post("/users", user_info).then((res) => {
           if (res.data.insertedId) {
             console.log("user created in database");
@@ -96,8 +118,8 @@ const axiosSecure = useAxiosSecure();
         });
         navigate(location.state ? location.state : "/");
       })
-      .catch((error) => {
-        console.log(error);
+       .catch((error) => {
+        toast.error(error.message || "Something went wrong. Please try again.");
       });
   };
   return (
