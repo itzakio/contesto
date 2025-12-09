@@ -4,22 +4,70 @@ import { FcGoogle } from "react-icons/fc";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+
 
 const Register = () => {
   const [show, setShow] = useState(false);
   const { registerUser, userProfileUpdate, googleSignIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
-//   const axiosSecure = useAxiosSecure();
+const axiosSecure = useAxiosSecure();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
+  const registerHandler = (data) => {
+    const profileImage = data.photo[0];
+    registerUser(data.email, data.password)
+      .then((result) => {
+        // 1. store image in form data
+        const formData = new FormData();
+        formData.append("image", profileImage);
+        const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_host_key
+        }`;
+        // 2. upload the image and get the url
+        axios.post(image_API_URL, formData).then((res) => {
+          const photo_url = res.data.data.url;
 
-   const googleSignInHandler = () => {
+          // create user in database
+          const user_info = {
+            email: data.email,
+            name: data.name,
+            photo_url,
+          };
+          axiosSecure.post("/users", user_info).then((res) => {
+            if (res.data.insertedId) {
+              console.log("user created in database");
+            }
+          });
+
+          //3. update user profile
+          const userProfile = {
+            displayName: data.name,
+            photoURL: photo_url,
+          };
+          userProfileUpdate(userProfile)
+            .then(() => {
+              console.log("user profile updated");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        });
+        navigate(location.state ? location.state : "/");
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const googleSignInHandler = () => {
     console.log("google login clicked");
     googleSignIn()
       .then((result) => {
@@ -36,6 +84,16 @@ const Register = () => {
         //     console.log("user created in database");
         //   }
         // });
+        axiosSecure.post("/users", user_info).then((res) => {
+          if (res.data.insertedId) {
+            console.log("user created in database");
+          }
+        });
+        axiosSecure.post("/users", user_info).then((res) => {
+          if (res.data.insertedId) {
+            console.log("user created in database");
+          }
+        });
         navigate(location.state ? location.state : "/");
       })
       .catch((error) => {
@@ -46,7 +104,7 @@ const Register = () => {
     <div className=" card w-full margin-y -mb-10 max-w-sm shrink-0 mx-auto">
       <div className="card-body">
         <form
-        //  onSubmit={handleSubmit(registerHandler)}
+         onSubmit={handleSubmit(registerHandler)}
         >
           <h3 className="text-4xl font-extrabold mb-2">Create an Account</h3>
           <p className="text-lg mb-4">Register with Contesto</p>

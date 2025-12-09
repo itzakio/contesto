@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { EffectComposer, RenderPass, EffectPass, BloomEffect, ChromaticAberrationEffect } from 'postprocessing';
 import * as THREE from 'three';
-import * as faceapi from 'face-api.js';
 
 const vert = `
 varying vec2 vUv;
@@ -308,7 +307,7 @@ export const GridScan = ({
   const chromaRef = useRef(null);
   const rafRef = useRef(null);
 
-  const [modelsReady, setModelsReady] = useState(false);
+  // No face-api: we no longer need model loading; keep a simple "webcam active" state for UI.
   const [uiFaceActive, setUiFaceActive] = useState(false);
 
   const lookTarget = useRef(new THREE.Vector2(0, 0));
@@ -339,25 +338,19 @@ export const GridScan = ({
     }
   };
 
-  const bufX = useRef([]);
-  const bufY = useRef([]);
-  const bufT = useRef([]);
-  const bufYaw = useRef([]);
-
   const s = THREE.MathUtils.clamp(sensitivity, 0, 1);
   const skewScale = THREE.MathUtils.lerp(0.06, 0.2, s);
   const tiltScale = THREE.MathUtils.lerp(0.12, 0.3, s);
   const yawScale = THREE.MathUtils.lerp(0.1, 0.28, s);
-  const depthResponse = THREE.MathUtils.lerp(0.25, 0.45, s);
   const smoothTime = THREE.MathUtils.lerp(0.45, 0.12, s);
   const maxSpeed = Infinity;
-
   const yBoost = THREE.MathUtils.lerp(1.2, 1.6, s);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
     let leaveTimer = null;
+
     const onMove = e => {
       if (uiFaceActive) return;
       if (leaveTimer) {
@@ -369,9 +362,11 @@ export const GridScan = ({
       const ny = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
       lookTarget.current.set(nx, ny);
     };
+
     const onClick = async () => {
       const nowSec = performance.now() / 1000;
       if (scanOnClick) pushScan(nowSec);
+
       if (
         enableGyro &&
         typeof window !== 'undefined' &&
@@ -381,32 +376,33 @@ export const GridScan = ({
         try {
           await DeviceOrientationEvent.requestPermission();
         } catch {
-          // noop
+          // ignore
         }
       }
     };
+
     const onEnter = () => {
       if (leaveTimer) {
         clearTimeout(leaveTimer);
         leaveTimer = null;
       }
     };
+
     const onLeave = () => {
       if (uiFaceActive) return;
       if (leaveTimer) clearTimeout(leaveTimer);
-      leaveTimer = window.setTimeout(
-        () => {
-          lookTarget.current.set(0, 0);
-          tiltTarget.current = 0;
-          yawTarget.current = 0;
-        },
-        Math.max(0, snapBackDelay || 0)
-      );
+      leaveTimer = window.setTimeout(() => {
+        lookTarget.current.set(0, 0);
+        tiltTarget.current = 0;
+        yawTarget.current = 0;
+      }, Math.max(0, snapBackDelay || 0));
     };
+
     el.addEventListener('mousemove', onMove);
     el.addEventListener('mouseenter', onEnter);
     if (scanOnClick) el.addEventListener('click', onClick);
     el.addEventListener('mouseleave', onLeave);
+
     return () => {
       el.removeEventListener('mousemove', onMove);
       el.removeEventListener('mouseenter', onEnter);
@@ -428,12 +424,11 @@ export const GridScan = ({
     renderer.toneMapping = THREE.NoToneMapping;
     renderer.autoClear = false;
     renderer.setClearColor(0x000000, 0);
+
     container.appendChild(renderer.domElement);
 
     const uniforms = {
-      iResolution: {
-        value: new THREE.Vector3(container.clientWidth, container.clientHeight, renderer.getPixelRatio())
-      },
+      iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, renderer.getPixelRatio()) },
       iTime: { value: 0 },
       uSkew: { value: new THREE.Vector2(0, 0) },
       uTilt: { value: 0 },
@@ -516,25 +511,11 @@ export const GridScan = ({
         smoothDampVec2(lookCurrent.current, lookTarget.current, lookVel.current, smoothTime, maxSpeed, dt)
       );
 
-      const tiltSm = smoothDampFloat(
-        tiltCurrent.current,
-        tiltTarget.current,
-        { v: tiltVel.current },
-        smoothTime,
-        maxSpeed,
-        dt
-      );
+      const tiltSm = smoothDampFloat(tiltCurrent.current, tiltTarget.current, { v: tiltVel.current }, smoothTime, maxSpeed, dt);
       tiltCurrent.current = tiltSm.value;
       tiltVel.current = tiltSm.v;
 
-      const yawSm = smoothDampFloat(
-        yawCurrent.current,
-        yawTarget.current,
-        { v: yawVel.current },
-        smoothTime,
-        maxSpeed,
-        dt
-      );
+      const yawSm = smoothDampFloat(yawCurrent.current, yawTarget.current, { v: yawVel.current }, smoothTime, maxSpeed, dt);
       yawCurrent.current = yawSm.value;
       yawVel.current = yawSm.v;
 
@@ -552,6 +533,7 @@ export const GridScan = ({
       }
       rafRef.current = requestAnimationFrame(tick);
     };
+
     rafRef.current = requestAnimationFrame(tick);
 
     return () => {
@@ -645,6 +627,7 @@ export const GridScan = ({
     scanDelay
   ]);
 
+  // Gyro support (still works; independent of face-api)
   useEffect(() => {
     if (!enableGyro) return;
     const handler = e => {
@@ -657,132 +640,49 @@ export const GridScan = ({
       tiltTarget.current = THREE.MathUtils.degToRad(gamma) * 0.4;
     };
     window.addEventListener('deviceorientation', handler);
-    return () => {
-      window.removeEventListener('deviceorientation', handler);
-    };
+    return () => window.removeEventListener('deviceorientation', handler);
   }, [enableGyro, uiFaceActive]);
 
-  useEffect(() => {
-    let canceled = false;
-    const load = async () => {
-      try {
-        await Promise.all([
-          faceapi.nets.tinyFaceDetector.loadFromUri(modelsPath),
-          faceapi.nets.faceLandmark68TinyNet.loadFromUri(modelsPath)
-        ]);
-        if (!canceled) setModelsReady(true);
-      } catch {
-        if (!canceled) setModelsReady(false);
-      }
-    };
-    load();
-    return () => {
-      canceled = true;
-    };
-  }, [modelsPath]);
-
+  // Webcam preview (NO face detection; just shows camera feed)
   useEffect(() => {
     let stop = false;
-    let lastDetect = 0;
     const video = videoRef.current;
+    if (!enableWebcam || !video) {
+      setUiFaceActive(false);
+      return;
+    }
 
-    const start = async () => {
-      if (!enableWebcam || !modelsReady) return;
-      if (!video) return;
-
+    (async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
           audio: false
         });
+        if (stop) {
+          stream.getTracks().forEach(t => t.stop());
+          return;
+        }
         video.srcObject = stream;
         await video.play();
+        setUiFaceActive(true); // "active" = webcam is running (no face tracking)
       } catch {
-        return;
+        setUiFaceActive(false);
       }
-
-      const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 });
-
-      const detect = async ts => {
-        if (stop) return;
-
-        if (ts - lastDetect >= 33) {
-          lastDetect = ts;
-          try {
-            const res = await faceapi.detectSingleFace(video, opts).withFaceLandmarks(true);
-            if (res && res.detection) {
-              const det = res.detection;
-              const box = det.box;
-              const vw = video.videoWidth || 1;
-              const vh = video.videoHeight || 1;
-
-              const cx = box.x + box.width * 0.5;
-              const cy = box.y + box.height * 0.5;
-              const nx = (cx / vw) * 2 - 1;
-              const ny = (cy / vh) * 2 - 1;
-              medianPush(bufX.current, nx, 5);
-              medianPush(bufY.current, ny, 5);
-              const nxm = median(bufX.current);
-              const nym = median(bufY.current);
-
-              const look = new THREE.Vector2(Math.tanh(nxm), Math.tanh(nym));
-
-              const faceSize = Math.min(1, Math.hypot(box.width / vw, box.height / vh));
-              const depthScale = 1 + depthResponse * (faceSize - 0.25);
-              lookTarget.current.copy(look.multiplyScalar(depthScale));
-
-              const leftEye = res.landmarks.getLeftEye();
-              const rightEye = res.landmarks.getRightEye();
-              const lc = centroid(leftEye);
-              const rc = centroid(rightEye);
-              const tilt = Math.atan2(rc.y - lc.y, rc.x - lc.x);
-              medianPush(bufT.current, tilt, 5);
-              tiltTarget.current = median(bufT.current);
-
-              const nose = res.landmarks.getNose();
-              const tip = nose[nose.length - 1] || nose[Math.floor(nose.length / 2)];
-              const jaw = res.landmarks.getJawOutline();
-              const leftCheek = jaw[3] || jaw[2];
-              const rightCheek = jaw[13] || jaw[14];
-              const dL = dist2(tip, leftCheek);
-              const dR = dist2(tip, rightCheek);
-              const eyeDist = Math.hypot(rc.x - lc.x, rc.y - lc.y) + 1e-6;
-              let yawSignal = THREE.MathUtils.clamp((dR - dL) / (eyeDist * 1.6), -1, 1);
-              yawSignal = Math.tanh(yawSignal);
-              medianPush(bufYaw.current, yawSignal, 5);
-              yawTarget.current = median(bufYaw.current);
-
-              setUiFaceActive(true);
-            } else {
-              setUiFaceActive(false);
-            }
-          } catch {
-            setUiFaceActive(false);
-          }
-        }
-
-        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-          video.requestVideoFrameCallback(() => detect(performance.now()));
-        } else {
-          requestAnimationFrame(detect);
-        }
-      };
-
-      requestAnimationFrame(detect);
-    };
-
-    start();
+    })();
 
     return () => {
       stop = true;
-      if (video) {
+      if (video?.srcObject) {
         const stream = video.srcObject;
         if (stream) stream.getTracks().forEach(t => t.stop());
+      }
+      if (video) {
         video.pause();
         video.srcObject = null;
       }
+      setUiFaceActive(false);
     };
-  }, [enableWebcam, modelsReady, depthResponse]);
+  }, [enableWebcam]);
 
   return (
     <div ref={containerRef} className={`relative w-full h-full overflow-hidden ${className ?? ''}`} style={style}>
@@ -790,13 +690,7 @@ export const GridScan = ({
         <div className="absolute right-3 bottom-3 w-[220px] h-[132px] rounded-lg overflow-hidden border border-white/25 shadow-[0_4px_16px_rgba(0,0,0,0.4)] bg-black text-white text-[12px] leading-[1.2] font-sans pointer-events-none">
           <video ref={videoRef} muted playsInline autoPlay className="w-full h-full object-cover -scale-x-100" />
           <div className="absolute left-2 top-2 px-[6px] py-[2px] bg-black/50 rounded-[6px] backdrop-blur-[4px]">
-            {enableWebcam
-              ? modelsReady
-                ? uiFaceActive
-                  ? 'Face: tracking'
-                  : 'Face: searching'
-                : 'Loading models'
-              : 'Webcam disabled'}
+            {enableWebcam ? (uiFaceActive ? 'Webcam: active' : 'Webcam: off / blocked') : 'Webcam disabled'}
           </div>
         </div>
       )}
@@ -863,31 +757,4 @@ function smoothDampFloat(current, target, velRef, smoothTime, maxSpeed, deltaTim
     velRef.v = 0;
   }
   return { value: out, v: velRef.v };
-}
-
-function medianPush(buf, v, maxLen) {
-  buf.push(v);
-  if (buf.length > maxLen) buf.shift();
-}
-
-function median(buf) {
-  if (buf.length === 0) return 0;
-  const a = [...buf].sort((x, y) => x - y);
-  const mid = Math.floor(a.length / 2);
-  return a.length % 2 ? a[mid] : (a[mid - 1] + a[mid]) * 0.5;
-}
-
-function centroid(points) {
-  let x = 0,
-    y = 0;
-  const n = points.length || 1;
-  for (const p of points) {
-    x += p.x;
-    y += p.y;
-  }
-  return { x: x / n, y: y / n };
-}
-
-function dist2(a, b) {
-  return Math.hypot(a.x - b.x, a.y - b.y);
 }

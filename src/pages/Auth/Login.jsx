@@ -3,23 +3,64 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Login = () => {
-  //   const { logInUser, googleSignIn } = useAuth();
+    const { logInUser, googleSignIn } = useAuth();
   const [show, setShow] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
-  //   const axiosSecure = useAxiosSecure();
+const axiosSecure = useAxiosSecure();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
+
+    const loginHandler = (data) =>{
+      console.log(data);
+      logInUser(data.email, data.password)
+      .then(result =>{
+        console.log(result.user);
+        navigate(location.state?location.state: "/")
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+    }
+
+
+    const googleSignInHandler = () => {
+    console.log("google login clicked");
+    googleSignIn()
+      .then((result) => {
+        console.log(result.user);
+
+        // create user in database
+        const user_info = {
+          email: result.user.email,
+          name: result.user.displayName,
+          photo_url: result.user.photoURL,
+        };
+        axiosSecure.post("/users", user_info).then((res) => {
+          if (res.data.insertedId) {
+            console.log("user created in database");
+          }
+        });
+        navigate(location.state ? location.state : "/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className=" card w-full margin-y max-w-sm shrink-0 mx-auto">
       <div className="card-body">
-        <form >
+        <form onSubmit={handleSubmit(loginHandler)}>
+          
           <h3 className="text-4xl font-extrabold mb-2">Welcome Back</h3>
           <p className="text-lg mb-4">Login with Contesto</p>
           <fieldset className="fieldset">
@@ -81,7 +122,7 @@ const Login = () => {
         <p className="text-center text-base">or</p>
         <div className="flex flex-col items-center">
           <button
-            // onClick={googleSignInHandler}
+            onClick={googleSignInHandler}
             className="flex items-center justify-center gap-1 cursor-pointer active:scale-98  w-full btn bg-gray-200"
           >
             <FcGoogle size={16} /> <span>Login with Google</span>

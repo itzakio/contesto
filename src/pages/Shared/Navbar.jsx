@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import { BiSolidBookAdd } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
-import { MdHome } from "react-icons/md";
-import { PiAddressBookFill } from "react-icons/pi";
-import { RiBookShelfFill, RiMenuFill } from "react-icons/ri";
+import {  RiMenuFill } from "react-icons/ri";
 import { Link, NavLink } from "react-router";
 import logo from "/logo.png";
 import { RxCrossCircled } from "react-icons/rx";
