@@ -44,6 +44,9 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/all-contests">
         All Contests
       </NavLink>
+      <NavLink className="nav-links" to="/dashboard">
+        Dashboard
+      </NavLink>
     </>
   );
   return (
@@ -56,12 +59,12 @@ const Navbar = () => {
     >
       <div className="navbar z-999  max-w-[1440px] mx-auto px-4 ">
         <div className="navbar-start">
-          <div className="flex items-center">
+          <Link to='/' className="flex items-center">
             <img className="size-12" src={logo} alt="" />
             <div className="hidden md:block">
               <h3 className="text-3xl font-extrabold text-primary">Contesto</h3>
             </div>
-          </div>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal hidden xl:flex font-semibold gap-4 ">
