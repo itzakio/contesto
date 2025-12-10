@@ -7,6 +7,7 @@ import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import UsersManagement from "../DashBoard/UsersManagement";
+import BeACreator from "../pages/BeACreator/BeACreator";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "all-contests",
         element: <AllContests />,
+      },
+      {
+        path: "be-a-creator",
+        element: <BeACreator />,
       },
     ],
   },

@@ -44,6 +44,9 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/all-contests">
         All Contests
       </NavLink>
+      <NavLink className="nav-links" to="/be-a-creator">
+        Be A Creator
+      </NavLink>
       <NavLink className="nav-links" to="/dashboard">
         Dashboard
       </NavLink>

@@ -56,3 +56,17 @@ nav a.active {
   @apply text-xl mb-2 font-semibold text-primary
 }
 
+/* swal button */
+.swal-confirm {
+  color: #000 !important; 
+  background-color: #27A2CC !important;
+}
+
+.swal-cancel {
+  color: #fff !important;
+  background-color: #ff0000 !important;
+}
+
+.swal-text {
+  color: #03373D !important; /* description text color */
+}
