@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   };
 
-  const logOutHandler = () => {
+  const logOutUser = () => {
     return signOut(auth);
   };
 
@@ -60,7 +60,7 @@ const AuthProvider = ({ children }) => {
     user,
     setUser,
     registerUser,
-    logOutHandler,
+    logOutUser,
     logInUser,
     userLoading,
     setUserLoading,

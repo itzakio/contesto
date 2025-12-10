@@ -32,12 +32,12 @@ const DashboardLayout = () => {
               <path d="M14 10l2 2l-2 2"></path>
             </svg>
           </label>
-          <duv to="/" className="flex items-center">
+          <div to="/" className="flex items-center">
             <img className="size-12" src={logo} alt="" />
             <div className="hidden md:block">
               <h3 className="text-3xl font-extrabold text-primary">Contesto</h3>
             </div>
-          </duv>
+          </div>
         </div>
         <div className="mr-4">
             <Link to='/' className="btn btn-primary text-black hidden md:flex items-center justify-center">Back to Home</Link>
