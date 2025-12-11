@@ -5,11 +5,14 @@ import { RiArrowLeftSLine, RiUserSettingsLine } from "react-icons/ri";
 import useAuth from "../hooks/useAuth";
 import Loading from "../Components/Loading";
 import { FaWpforms } from "react-icons/fa";
+import useRole from "../hooks/useRole";
+import { Toaster } from "react-hot-toast";
 
 const DashboardLayout = () => {
-  const {userLoading} = useAuth();
-  if(userLoading){
-    return <Loading/>
+  const { userLoading } = useAuth();
+  const { role } = useRole();
+  if (userLoading) {
+    return <Loading />;
   }
   return (
     <div className="drawer lg:drawer-open">
@@ -17,42 +20,54 @@ const DashboardLayout = () => {
       <div className="drawer-content">
         {/* Navbar */}
         <nav className="navbar w-full bg-base-300 flex items-center justify-between">
-        <div className="flex items-center">
-              <label
-            htmlFor="my-drawer-4"
-            aria-label="open sidebar"
-            className="btn btn-square btn-ghost"
-          >
-            {/* Sidebar toggle icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              strokeWidth="2"
-              fill="none"
-              stroke="currentColor"
-              className="my-1.5 inline-block size-4"
+          <div className="flex items-center">
+            <label
+              htmlFor="my-drawer-4"
+              aria-label="open sidebar"
+              className="btn btn-square btn-ghost"
             >
-              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
-              <path d="M9 4v16"></path>
-              <path d="M14 10l2 2l-2 2"></path>
-            </svg>
-          </label>
-          <div to="/" className="flex items-center">
-            <img className="size-12" src={logo} alt="" />
-            <div className="hidden md:block">
-              <h3 className="text-3xl font-extrabold text-primary">Contesto</h3>
+              {/* Sidebar toggle icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                strokeWidth="2"
+                fill="none"
+                stroke="currentColor"
+                className="my-1.5 inline-block size-4"
+              >
+                <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
+                <path d="M9 4v16"></path>
+                <path d="M14 10l2 2l-2 2"></path>
+              </svg>
+            </label>
+            <div to="/" className="flex items-center">
+              <img className="size-12" src={logo} alt="" />
+              <div className="hidden md:block">
+                <h3 className="text-3xl font-extrabold text-primary">
+                  Contesto
+                </h3>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mr-4">
-            <Link to='/' className="btn btn-primary text-black hidden md:flex items-center justify-center">Back to Home</Link>
-            <Link to='/' className="btn btn-primary text-black btn-square md:hidden"><RiArrowLeftSLine size={24}/></Link>
-        </div>
+          <div className="mr-4">
+            <Link
+              to="/"
+              className="btn btn-primary text-black hidden md:flex items-center justify-center"
+            >
+              Back to Home
+            </Link>
+            <Link
+              to="/"
+              className="btn btn-primary text-black btn-square md:hidden"
+            >
+              <RiArrowLeftSLine size={24} />
+            </Link>
+          </div>
         </nav>
         {/* Page content here */}
-        <Outlet/>
+        <Outlet />
       </div>
 
       <div className="drawer-side is-drawer-close:overflow-visible">
@@ -88,32 +103,39 @@ const DashboardLayout = () => {
               </button>
             </li>
 
-            {/* List item */}
-            <li>
-              <Link
-              to='/dashboard/users-management'
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Users Management"
-              >
-                {/* User_Management */}
-                <RiUserSettingsLine size={20} />
-                <span className="is-drawer-close:hidden">Users Management</span>
-              </Link>
-            </li>
-            {/* List item */}
-            <li>
-              <Link
-              to='/dashboard/pending-creators'
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Creators Applications"
-              >
-                {/*Creators_Application */}
-                <FaWpforms size={20} />
-                <span className="is-drawer-close:hidden">Creators Applications</span>
-              </Link>
-            </li>
+            {role?.role === "admin" && (
+              <>
+                {/* List item */}
+                <li>
+                  <Link
+                    to="/dashboard/users-management"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Users Management"
+                  >
+                    {/* User_Management */}
+                    <RiUserSettingsLine size={20} />
+                    <span className="is-drawer-close:hidden">
+                      Users Management
+                    </span>
+                  </Link>
+                </li>
 
-            
+                {/* List item */}
+                <li>
+                  <Link
+                    to="/dashboard/pending-creators"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Creators Applications"
+                  >
+                    {/*Creators_Application */}
+                    <FaWpforms size={20} />
+                    <span className="is-drawer-close:hidden">
+                      Creators Applications
+                    </span>
+                  </Link>
+                </li>
+              </>
+            )}
 
             {/* List item */}
             <li>
@@ -143,6 +165,7 @@ const DashboardLayout = () => {
           </ul>
         </div>
       </div>
+       <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

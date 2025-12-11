@@ -17,6 +17,7 @@ const BeACreator = () => {
   } = useForm();
 
   const beACreatorHandler = (data) => {
+    data.photoURL = user.photoURL
     console.log(data);
     axiosSecure.post("/creators", data).then((res) => {
       if (res.data.message) {
@@ -49,7 +50,7 @@ const BeACreator = () => {
               {/* Full Name */}
               <label className="label text-base font-semibold">Full Name</label>
               <input
-                {...register("fullName", {
+                {...register("creatorName", {
                   required: "Full name is required",
                   minLength: {
                     value: 3,
@@ -61,9 +62,9 @@ const BeACreator = () => {
                 placeholder="Enter Your Full Name"
                 className="input w-full text-base placeholder:text-accent"
               />
-              {errors.fullName && (
+              {errors.creatorName && (
                 <p className="text-red-500 text-sm">
-                  {errors.fullName.message}
+                  {errors.creatorName.message}
                 </p>
               )}
 

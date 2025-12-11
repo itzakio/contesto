@@ -33,13 +33,13 @@ const axiosSecure = useAxiosSecure();
         }`;
         // 2. upload the image and get the url
         axios.post(image_API_URL, formData).then((res) => {
-          const photo_url = res.data.data.url;
+          const photoURL = res.data.data.url;
 
           // create user in database
           const user_info = {
             email: data.email,
             name: data.name,
-            photo_url,
+            photoURL,
           };
           axiosSecure.post("/users", user_info).then((res) => {
             if (res.data.insertedId) {
@@ -50,7 +50,7 @@ const axiosSecure = useAxiosSecure();
           //3. update user profile
           const userProfile = {
             displayName: data.name,
-            photoURL: photo_url,
+            photoURL: photoURL,
           };
           userProfileUpdate(userProfile)
             .then(() => {

@@ -21,7 +21,6 @@ const Login = () => {
   } = useForm();
 
   const loginHandler = (data) => {
-    console.log(data);
     logInUser(data.email, data.password)
       .then((result) => {
         const user = result.user;
@@ -65,7 +64,6 @@ const Login = () => {
   };
 
   const googleSignInHandler = () => {
-    console.log("google login clicked");
     googleSignIn()
       .then((result) => {
         const user = result.user;

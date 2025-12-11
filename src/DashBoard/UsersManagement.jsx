@@ -118,7 +118,7 @@ const UsersManagement = () => {
                   <div className="flex items-center gap-3">
                     <div className="avatar">
                       <div className="mask mask-squircle h-12 w-12">
-                        <img src={user.photo_url} alt="user photo" />
+                        <img src={user.photoURL} alt="user photo" />
                       </div>
                     </div>
                     <div>

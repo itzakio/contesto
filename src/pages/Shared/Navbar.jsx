@@ -6,11 +6,13 @@ import logo from "/logo.png";
 import { RxCrossCircled } from "react-icons/rx";
 import useAuth from "../../hooks/useAuth";
 
+
 const Navbar = () => {
-  const {user, logOutHandler} = useAuth();
+  const {user, logOutUser} = useAuth();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [show, setShow] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+
 
   useEffect(() => {
     const html = document.querySelector("html");
@@ -44,6 +46,7 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/all-contests">
         All Contests
       </NavLink>
+   
       <NavLink className="nav-links" to="/be-a-creator">
         Be A Creator
       </NavLink>
@@ -149,7 +152,7 @@ const Navbar = () => {
             </div>
             {user ? (
               <button
-                onClick={logOutHandler}
+                onClick={()=>logOutUser()}
                 className="py-2 px-3 cursor-pointer font-medium bg-primary text-white"
               >
                 Logout
@@ -271,7 +274,7 @@ const Navbar = () => {
         </div>
         {user && (
           <button
-            onClick={logOutHandler}
+           onClick={()=>logOutUser()}
             className="py-2 px-3 cursor-pointer font-medium bg-primary text-white absolute bottom-8"
           >
             Logout

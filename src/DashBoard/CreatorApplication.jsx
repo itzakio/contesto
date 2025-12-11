@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../Components/Loading";
+import toast from "react-hot-toast";
 
 const CreatorApplication = () => {
   const axiosSecure = useAxiosSecure();
@@ -17,6 +18,21 @@ const CreatorApplication = () => {
       return res.data;
     },
   });
+
+
+  const applicationDeleteHandler = (id) =>{
+    axiosSecure.delete(`/creators/${id}`)
+    .then(res =>{
+        console.log(res.data);
+        if(res.data.deletedCount){
+            refetch();
+            toast.success("Creator application deleted!")
+        }
+    })
+    .catch(error=>{
+        toast.error(error.message)
+    })
+  }
 
   if (isLoading) {
     return <Loading />;
@@ -61,10 +77,10 @@ const CreatorApplication = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>User Info</th>
-              <th>Role</th>
+              <th>Creator Info</th>
+              <th>Category</th>
               <th className="text-center">Admin Actions</th>
-              <th>Actions</th>
+              <th className="text-center">More Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -89,9 +105,10 @@ const CreatorApplication = () => {
                   <button className="btn btn-primary text-black">Approve</button>
                   <button className="btn btn-error">Reject</button>
                 </td>
-                <th>
+                <td className="flex justify-center gap-4">
                   <button className="btn">details</button>
-                </th>
+                  <button onClick={()=>applicationDeleteHandler(creator._id)} className="btn btn-error">Delete</button>
+                </td>
               </tr>
             ))}
           </tbody>

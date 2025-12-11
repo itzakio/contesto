@@ -9,6 +9,8 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import UsersManagement from "../DashBoard/UsersManagement";
 import BeACreator from "../pages/BeACreator/BeACreator";
 import CreatorApplication from "../DashBoard/CreatorApplication";
+import PrivateRoute from "./PrivateRoute";
+import AdminRoute from "./AdminRoute";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +27,12 @@ const router = createBrowserRouter([
       },
       {
         path: "be-a-creator",
-        element: <BeACreator />,
+        element: (
+          <PrivateRoute>
+            {" "}
+            <BeACreator />
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -45,18 +52,27 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout/>,
+    element: <DashboardLayout />,
     children: [
+      // admin only route
       {
         path: "users-management",
-        element: <UsersManagement/>
+        element: (
+          <AdminRoute>
+            <UsersManagement />
+          </AdminRoute>
+        ),
       },
       {
         path: "pending-creators",
-        element: <CreatorApplication/>
-      }
-    ]
-  }
+        element: (
+          <AdminRoute>
+            <CreatorApplication />
+          </AdminRoute>
+        ),
+      },
+    ],
+  },
 ]);
 
 export default router;
