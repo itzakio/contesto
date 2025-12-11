@@ -3,18 +3,19 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useState } from "react";
 import { TbCrown, TbCrownOff } from "react-icons/tb";
 import Swal from "sweetalert2";
+import Loading from "../Components/Loading";
 
 const UsersManagement = () => {
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
-  const { data: users = [], refetch } = useQuery({
+  const { data: users = [], refetch, isLoading } = useQuery({
     queryKey: ["users", searchText],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users?searchText=${searchText}`);
       return res.data;
     },
   });
-  console.log(users);
+  
 
 
     const makeAdminHandler = (user, userRole) => {
@@ -58,6 +59,11 @@ const UsersManagement = () => {
       }
     });
   };
+
+
+  if(isLoading){
+    return <Loading/>
+  }
 
   return (
     <div>

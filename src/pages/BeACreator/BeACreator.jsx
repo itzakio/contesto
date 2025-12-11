@@ -19,8 +19,8 @@ const BeACreator = () => {
   const beACreatorHandler = (data) => {
     console.log(data);
     axiosSecure.post("/creators", data).then((res) => {
-      if(res.data.message){
-        return toast.error(res.data.message)
+      if (res.data.message) {
+        return toast.error(res.data.message);
       }
       if (res.data.insertedId) {
         Swal.fire({
@@ -42,7 +42,7 @@ const BeACreator = () => {
       <div data-aos="fade-right">
         <div className="card w-full max-w-sm mx-auto mt-10 ">
           <div className="card-body">
-            <h2 className="text-4xl font-extrabold mb-2">Become a Creator</h2>
+            <h2 className="text-4xl font-extrabold mb-2 text-primary">Become a Creator</h2>
             <p className="text-lg mb-4">Fill out the form to host contests</p>
 
             <form onSubmit={handleSubmit(beACreatorHandler)}>
@@ -112,52 +112,31 @@ const BeACreator = () => {
               <label className="label text-base font-semibold mt-4">
                 Contest Categories
               </label>
+
               <div className="flex flex-col gap-2">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    {...register("categories")}
-                    value="coding"
-                    className="checkbox checkbox-primary"
-                  />
-                  Coding
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    {...register("categories")}
-                    value="quiz"
-                    className="checkbox checkbox-primary"
-                  />
-                  Quiz
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    {...register("categories")}
-                    value="art"
-                    className="checkbox checkbox-primary"
-                  />
-                  Art
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    {...register("categories")}
-                    value="writing"
-                    className="checkbox checkbox-primary"
-                  />
-                  Writing
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    {...register("categories")}
-                    value="gaming"
-                    className="checkbox checkbox-primary"
-                  />
-                  Gaming
-                </label>
+                {[
+                  "Quiz",
+                  "Coding",
+                  "Creative Design",
+                  "Writing",
+                  "Photography",
+                  "Idea Pitch",
+                  "Logic & Puzzle",
+                  "Gaming (Score-based)",
+                ].map((category) => (
+                  <label
+                    key={category}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      {...register("categories")}
+                      value={category}
+                      className="checkbox checkbox-primary checkbox-sm mb-1"
+                    />
+                    <span className="text-base">{category}</span>
+                  </label>
+                ))}
               </div>
 
               {/* Short Bio */}
@@ -186,7 +165,7 @@ const BeACreator = () => {
                   {...register("agreement", {
                     required: "You must agree to the terms",
                   })}
-                  className="checkbox checkbox-primary checkbox-sm "
+                  className="checkbox checkbox-primary checkbox-sm mb-1"
                 />
                 <label className="text-base font-medium">
                   I agree to follow platform rules

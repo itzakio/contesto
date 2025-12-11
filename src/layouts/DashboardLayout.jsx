@@ -2,8 +2,15 @@ import React from "react";
 import logo from "/logo.png";
 import { Link, Outlet } from "react-router";
 import { RiArrowLeftSLine, RiUserSettingsLine } from "react-icons/ri";
+import useAuth from "../hooks/useAuth";
+import Loading from "../Components/Loading";
+import { FaWpforms } from "react-icons/fa";
 
 const DashboardLayout = () => {
+  const {userLoading} = useAuth();
+  if(userLoading){
+    return <Loading/>
+  }
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -86,11 +93,23 @@ const DashboardLayout = () => {
               <Link
               to='/dashboard/users-management'
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Homepage"
+                data-tip="Users Management"
               >
                 {/* User_Management */}
                 <RiUserSettingsLine size={20} />
-                <span className="is-drawer-close:hidden">User Management</span>
+                <span className="is-drawer-close:hidden">Users Management</span>
+              </Link>
+            </li>
+            {/* List item */}
+            <li>
+              <Link
+              to='/dashboard/pending-creators'
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Creators Applications"
+              >
+                {/*Creators_Application */}
+                <FaWpforms size={20} />
+                <span className="is-drawer-close:hidden">Creators Applications</span>
               </Link>
             </li>
 

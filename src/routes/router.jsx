@@ -8,6 +8,7 @@ import Register from "../pages/Auth/Register";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import UsersManagement from "../DashBoard/UsersManagement";
 import BeACreator from "../pages/BeACreator/BeACreator";
+import CreatorApplication from "../DashBoard/CreatorApplication";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "users-management",
         element: <UsersManagement/>
+      },
+      {
+        path: "pending-creators",
+        element: <CreatorApplication/>
       }
     ]
   }

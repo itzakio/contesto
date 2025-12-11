@@ -2,10 +2,13 @@ import React from "react";
 import Banner from "../Shared/Banner";
 import TextPressure from "../../Components/TextPressure";
 import logo from "/logo.png";
+import Loading from "../../Components/Loading";
+import Forbidden from "../../Components/Forbidden";
 
 const Home = () => {
   return (
     <div className="relative ">
+    
       <Banner />
 
       <div className="absolute hidden xl:block w-[1200px] h-[500px] top-0 xl:top-10 left-1/2 -translate-x-1/2 ">
@@ -77,8 +80,8 @@ const Home = () => {
           </form>
         </div>
       </div>
-
-      
+          <Forbidden/>
+        <Loading/>
     </div>
   );
 };
