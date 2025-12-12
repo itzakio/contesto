@@ -3,6 +3,7 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../Components/Loading";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const CreatorApplication = () => {
   const axiosSecure = useAxiosSecure();
@@ -12,27 +13,70 @@ const CreatorApplication = () => {
     refetch,
     isLoading,
   } = useQuery({
-    queryKey: ["users", searchText],
+    queryKey: ["creators-applications", searchText],
     queryFn: async () => {
       const res = await axiosSecure.get(`/creators?searchText=${searchText}`);
       return res.data;
     },
   });
 
-
-  const applicationDeleteHandler = (id) =>{
-    axiosSecure.delete(`/creators/${id}`)
-    .then(res =>{
-        console.log(res.data);
-        if(res.data.deletedCount){
-            refetch();
-            toast.success("Creator application deleted!")
+  const applicationDeleteHandler = (id) => {
+    axiosSecure
+      .delete(`/creators/${id}`)
+      .then((res) => {
+        if (res.data.deletedCount) {
+          refetch();
+          toast.success("Creator application deleted!");
         }
-    })
-    .catch(error=>{
-        toast.error(error.message)
-    })
-  }
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+  const creatorStatusUpdateHandler = (creator, status) => {
+    const CreatorStatus = {
+      status: status,
+    };
+    
+
+    Swal.fire({
+      title: `Do you want to ${status} this creator?`,
+      icon: "warning",
+      showCancelButton: true,
+      customClass: {
+        title: "swal-text",
+        htmlContainer: "swal-text",
+        confirmButton: "swal-confirm",
+        cancelButton: "swal-cancel",
+      },
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .patch(`/creators/${creator._id}`, CreatorStatus)
+          .then((res) => {
+            if (res.data.modifiedCount) {
+              refetch();
+              Swal.fire({
+                title: `Creator status update to ${status}!`,
+
+                icon: "success",
+                timer: 2500,
+                customClass: {
+                  title: "swal-text",
+                  htmlContainer: "swal-text",
+                  confirmButton: "swal-confirm",
+                },
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -78,7 +122,8 @@ const CreatorApplication = () => {
             <tr>
               <th>#</th>
               <th>Creator Info</th>
-              <th>Category</th>
+              <th>Categories</th>
+              <th className="text-center">Status</th>
               <th className="text-center">Admin Actions</th>
               <th className="text-center">More Actions</th>
             </tr>
@@ -91,23 +136,67 @@ const CreatorApplication = () => {
                   <div className="flex items-center gap-3">
                     <div className="avatar">
                       <div className="mask mask-squircle h-12 w-12">
-                        <img src={creator?.photo_url} alt="creator? photo" />
+                        <img src={creator?.photoURL} alt="creator? photo" />
                       </div>
                     </div>
                     <div>
-                      <div className="font-bold">{creator?.name}</div>
+                      <div className="font-bold">{creator?.creatorName}</div>
                       <div className="text-sm opacity-50">{creator?.email}</div>
                     </div>
                   </div>
                 </td>
-                <td>{creator?.role}</td>
-                <td className="text-center space-x-4">
-                  <button className="btn btn-primary text-black">Approve</button>
-                  <button className="btn btn-error">Reject</button>
+                <td>{creator?.categories?.join(", ")}</td>
+                <td>
+                  <p
+                    className={`rounded-full w-fit p-1 px-2 mx-auto ${
+                      creator.status === "pending"
+                        ? "bg-yellow-300"
+                        : creator.status === "approved"
+                        ? "bg-green-300"
+                        : "bg-red-300"
+                    }`}
+                  >
+                    {creator?.status}
+                  </p>
                 </td>
-                <td className="flex justify-center gap-4">
-                  <button className="btn">details</button>
-                  <button onClick={()=>applicationDeleteHandler(creator._id)} className="btn btn-error">Delete</button>
+                <td>
+                  <div className="flex justify-center gap-4">
+                    {creator?.status !== "approved" && <button
+                      onClick={() =>
+                        creatorStatusUpdateHandler(creator, "approved")
+                      }
+                      className="btn btn-primary text-black"
+                    >
+                      Approve
+                    </button>}
+                    {creator?.status === "pending" &&<button
+                      onClick={() =>
+                        creatorStatusUpdateHandler(creator, "rejected")
+                      }
+                      className="btn btn-error"
+                    >
+                      Reject
+                    </button>}
+                    {creator?.status === "approved" &&<button
+                      onClick={() =>
+                        creatorStatusUpdateHandler(creator, "deactivated")
+                      }
+                      className="btn btn-error"
+                    >
+                      Deactivate
+                    </button>}
+                  </div>
+                </td>
+                <td>
+                  <div className="flex justify-center gap-4">
+                    <button className="btn">details</button>
+                    <button
+                      onClick={() => applicationDeleteHandler(creator._id)}
+                      className="btn btn-error"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
