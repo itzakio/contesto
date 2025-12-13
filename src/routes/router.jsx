@@ -11,6 +11,8 @@ import BeACreator from "../pages/BeACreator/BeACreator";
 import CreatorApplication from "../DashBoard/CreatorApplication";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
+import CreateContest from "../DashBoard/CreateContest";
+import CreatorRoute from "./CreatorRoute";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,10 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "create-contest",
+        element: <CreatorRoute><CreateContest/></CreatorRoute>
+      }
     ],
   },
   {
@@ -70,7 +76,7 @@ const router = createBrowserRouter([
             <CreatorApplication />
           </AdminRoute>
         ),
-      },
+      }
     ],
   },
 ]);

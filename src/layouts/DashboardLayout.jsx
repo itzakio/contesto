@@ -2,6 +2,7 @@ import React from "react";
 import logo from "/logo.png";
 import { Link, Outlet } from "react-router";
 import { RiArrowLeftSLine, RiUserSettingsLine } from "react-icons/ri";
+import { HiOutlineSquaresPlus } from "react-icons/hi2";
 import useAuth from "../hooks/useAuth";
 import Loading from "../Components/Loading";
 import { FaWpforms } from "react-icons/fa";
@@ -103,6 +104,24 @@ const DashboardLayout = () => {
               </button>
             </li>
 
+            {role?.role === "creator" && (
+              <>
+                {/* List item */}
+                <li>
+                  <Link
+                    to="/create-contest"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Create Contest"
+                  >
+                    {/* User_Management */}
+                    <HiOutlineSquaresPlus size={20} />
+                    <span className="is-drawer-close:hidden">
+                      Create Contest
+                    </span>
+                  </Link>
+                </li>
+              </>
+            )}
             {role?.role === "admin" && (
               <>
                 {/* List item */}

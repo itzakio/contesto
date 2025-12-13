@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
-import {  RiMenuFill } from "react-icons/ri";
+import { RiMenuFill } from "react-icons/ri";
 import { Link, NavLink } from "react-router";
 import logo from "/logo.png";
 import { RxCrossCircled } from "react-icons/rx";
 import useAuth from "../../hooks/useAuth";
-
+import useRole from "../../hooks/useRole";
 
 const Navbar = () => {
-  const {user, logOutUser} = useAuth();
+  const { user, logOutUser } = useAuth();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [show, setShow] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-
+  const role = useRole();
 
   useEffect(() => {
     const html = document.querySelector("html");
@@ -46,10 +46,17 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/all-contests">
         All Contests
       </NavLink>
-   
+
       <NavLink className="nav-links" to="/be-a-creator">
         Be A Creator
       </NavLink>
+      {role?.role.role === "creator" && (
+        <>
+          <NavLink className="nav-links" to="/create-contest">
+            Create Contest
+          </NavLink>
+        </>
+      )}
       <NavLink className="nav-links" to="/dashboard">
         Dashboard
       </NavLink>
@@ -65,7 +72,7 @@ const Navbar = () => {
     >
       <div className="navbar z-999  max-w-[1440px] mx-auto px-4 ">
         <div className="navbar-start">
-          <Link to='/' className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img className="size-12" src={logo} alt="" />
             <div className="hidden md:block">
               <h3 className="text-3xl font-extrabold text-primary">Contesto</h3>
@@ -152,7 +159,7 @@ const Navbar = () => {
             </div>
             {user ? (
               <button
-                onClick={()=>logOutUser()}
+                onClick={() => logOutUser()}
                 className="py-2 px-3 cursor-pointer font-medium bg-primary text-white"
               >
                 Logout
@@ -165,7 +172,6 @@ const Navbar = () => {
                 Login
               </Link>
             )}
-              
           </div>
           <RiMenuFill
             onClick={() => setShow(!show)}
@@ -254,6 +260,9 @@ const Navbar = () => {
           </div>
           <div className="text-xl font-semibold">
             {user ? <p>{user?.displayName}</p> : <p>User</p>}
+            <p className=" text-xs bg-green-300 text-green-700 p-1 text-center">
+              {role?.role.role}
+            </p>
           </div>
           {user ? (
             <Link className="py-2 px-3 font-medium bg-primary text-white">
@@ -274,7 +283,7 @@ const Navbar = () => {
         </div>
         {user && (
           <button
-           onClick={()=>logOutUser()}
+            onClick={() => logOutUser()}
             className="py-2 px-3 cursor-pointer font-medium bg-primary text-white absolute bottom-8"
           >
             Logout

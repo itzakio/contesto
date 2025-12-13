@@ -56,6 +56,17 @@ nav a.active {
   @apply text-xl mb-2 font-semibold text-primary
 }
 
+.margin-top {
+  @apply mt-6 md:mt-8 lg:mt-12 xl:mt-16;
+}
+.margin-bottom {
+  @apply mb-6 md:mb-8 lg:mb-12 xl:mb-16;
+}
+.margin-y {
+  @apply my-6 md:my-8 lg:my-12 xl:my-16;
+}
+
+
 /* swal button */
 .swal-confirm {
   color: #000 !important; 

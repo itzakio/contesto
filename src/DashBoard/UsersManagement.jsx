@@ -8,17 +8,19 @@ import Loading from "../Components/Loading";
 const UsersManagement = () => {
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
-  const { data: users = [], refetch, isLoading } = useQuery({
+  const {
+    data: users = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["users", searchText],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users?searchText=${searchText}`);
       return res.data;
     },
   });
-  
 
-
-    const makeAdminHandler = (user, userRole) => {
+  const makeAdminHandler = (user, userRole) => {
     const roleInfo = { role: userRole };
     Swal.fire({
       title: `Are you sure you want to ${
@@ -61,9 +63,6 @@ const UsersManagement = () => {
   };
 
 
-  if(isLoading){
-    return <Loading/>
-  }
 
   return (
     <div>
@@ -90,73 +89,79 @@ const UsersManagement = () => {
             </g>
           </svg>
           <input
+            type="text"
+            placeholder="Search"
+            value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            type="search"
-            required
-            placeholder="Find User"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") e.preventDefault();
+            }}
           />
         </label>
       </div>
-
-      <div className="overflow-x-auto table-zebra bg-base-100">
-        <table className="table">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>User Info</th>
-              <th>Role</th>
-              <th className="text-center">Admin Actions</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr key={user._id}>
-                <td>{index + 1}</td>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle h-12 w-12">
-                        <img src={user.photoURL} alt="user photo" />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="overflow-x-auto table-zebra bg-base-100">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>User Info</th>
+                <th>Role</th>
+                <th className="text-center">Admin Actions</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user, index) => (
+                <tr key={user._id}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="avatar">
+                        <div className="mask mask-squircle h-12 w-12">
+                          <img src={user.photoURL} alt="user photo" />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold">{user.name}</div>
+                        <div className="text-sm opacity-50">{user.email}</div>
                       </div>
                     </div>
-                    <div>
-                      <div className="font-bold">{user.name}</div>
-                      <div className="text-sm opacity-50">{user.email}</div>
-                    </div>
-                  </div>
-                </td>
-                <td>{user.role}</td>
-                <td className="text-center">
-                  {user.role === "admin" ? (
-                    <div className="tooltip" data-tip="Remove from Admin">
-                      <button
-                        onClick={() => makeAdminHandler(user, "user")}
-                        className="btn btn-square btn-sm hover:btn-error mx-auto btn-error"
-                      >
-                        <TbCrownOff />
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="tooltip" data-tip="Make Admin">
-                    <button
-                      onClick={() => makeAdminHandler(user, "admin")}
-                      className="btn btn-square btn-sm hover:btn-primary text-black mx-auto btn-primary "
-                    >
-                      <TbCrown />
-                    </button>
-                    </div>
-                  )}
-                </td>
-                <th>
-                  <button className="btn btn-xs">details</button>
-                </th>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  </td>
+                  <td>{user.role}</td>
+                  <td className="text-center">
+                    {user.role === "admin" ? (
+                      <div className="tooltip" data-tip="Remove from Admin">
+                        <button
+                          onClick={() => makeAdminHandler(user, "user")}
+                          className="btn btn-square btn-sm hover:btn-error mx-auto btn-error"
+                        >
+                          <TbCrownOff />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="tooltip" data-tip="Make Admin">
+                        <button
+                          onClick={() => makeAdminHandler(user, "admin")}
+                          className="btn btn-square btn-sm hover:btn-primary text-black mx-auto btn-primary "
+                        >
+                          <TbCrown />
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                  <th>
+                    <button className="btn btn-xs">details</button>
+                  </th>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
