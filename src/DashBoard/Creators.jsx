@@ -5,7 +5,7 @@ import Loading from "../Components/Loading";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
-const CreatorApplication = () => {
+const Creators = () => {
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
   const {
@@ -214,4 +214,4 @@ const CreatorApplication = () => {
   );
 };
 
-export default CreatorApplication;
+export default Creators;

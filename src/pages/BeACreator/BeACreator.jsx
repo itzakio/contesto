@@ -14,6 +14,7 @@ const BeACreator = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm();
 
   const beACreatorHandler = (data) => {
@@ -35,6 +36,7 @@ const BeACreator = () => {
             confirmButton: "swal-confirm",
           },
         });
+        reset();
       }
     });
   };

@@ -8,11 +8,11 @@ import Register from "../pages/Auth/Register";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import UsersManagement from "../DashBoard/UsersManagement";
 import BeACreator from "../pages/BeACreator/BeACreator";
-import CreatorApplication from "../DashBoard/CreatorApplication";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import CreateContest from "../DashBoard/CreateContest";
 import CreatorRoute from "./CreatorRoute";
+import Creators from "../DashBoard/Creators";
 
 const router = createBrowserRouter([
   {
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
         path: "pending-creators",
         element: (
           <AdminRoute>
-            <CreatorApplication />
+            <Creators />
           </AdminRoute>
         ),
       }

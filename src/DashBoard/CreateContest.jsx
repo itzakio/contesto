@@ -1,26 +1,89 @@
+import axios from "axios";
 import { useForm } from "react-hook-form";
+import useAuth from "../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export default function CreateContest() {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const { data: currentCreator = [] } = useQuery({
+    queryKey: ["creator", user.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/creators?email=${user.email}`);
+      return res.data;
+    },
+  });
+  const creator = currentCreator[0];
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm();
 
   const onSubmit = (data) => {
     const participationEndAt = new Date(`${data.endDate}T${data.endTime}`);
+    const coverImage = data.thumbnail[0];
 
-    const contestData = {
-      title: data.title,
-      category: data.category,
-      description: data.description,
-      entryFee: Number(data.entryFee),
-      prize: Number(data.prize),
-      participationEndAt, // IMPORTANT
-    };
+    // 1. store image in form data
+    const formData = new FormData();
+    formData.append("image", coverImage);
+    const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+      import.meta.env.VITE_image_host_key
+    }`;
+    // 2. upload the image and get the url
+    axios.post(image_API_URL, formData).then((res) => {
+      const photoURL = res.data.data.url;
 
-    console.log(contestData);
+      // create user in database
 
+      const contestData = {
+        title: data.title,
+        category: data.category,
+        description: data.description,
+        entryFee: Number(data.entryFee),
+        prize: Number(data.prize),
+        participationEndAt,
+        contestThumbnail: photoURL,
+        creatorEmail: user?.email,
+      };
+
+      Swal.fire({
+        title: `Are you sure you want to post this contest?`,
+        icon: "warning",
+        showCancelButton: true,
+        customClass: {
+          title: "swal-text",
+          htmlContainer: "swal-text",
+          confirmButton: "swal-confirm",
+          cancelButton: "swal-cancel",
+        },
+        confirmButtonText: "Confirm",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axiosSecure.post("/contests", contestData).then((res) => {
+            if (res.data.insertedId) {
+              Swal.fire({
+                title: `Post submitted for admin approval!`,
+
+                icon: "success",
+                timer: 2500,
+                customClass: {
+                  title: "swal-text",
+                  htmlContainer: "swal-text",
+                  confirmButton: "swal-confirm",
+                },
+              });
+              reset();
+            }
+          });
+        }
+      });
+    });
     // axios.post("/contests", contestData)
   };
 
@@ -72,15 +135,10 @@ export default function CreateContest() {
                   required: "Category is required",
                 })}
               >
-                <option value="">Select</option>
-                <option>Quiz Contest</option>
-                <option>Coding Contest</option>
-                <option>Creative Design Contest</option>
-                <option>Writing Contest</option>
-                <option>Photography Contest</option>
-                <option>Idea Pitch Contest</option>
-                <option>Logic & Puzzle Contest</option>
-                <option>Gaming (Score-based) Contest</option>
+                <option value="">Select Category</option>
+                {creator?.categories?.map((cat, idx) => (
+                  <option key={idx}>{cat}</option>
+                ))}
               </select>
               {errors.category && (
                 <p className="text-red-500">{errors.category.message}</p>

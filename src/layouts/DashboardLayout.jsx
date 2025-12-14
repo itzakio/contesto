@@ -144,12 +144,12 @@ const DashboardLayout = () => {
                   <Link
                     to="/dashboard/pending-creators"
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Creators Applications"
+                    data-tip="Creators"
                   >
                     {/*Creators_Application */}
                     <FaWpforms size={20} />
                     <span className="is-drawer-close:hidden">
-                      Creators Applications
+                      Creators
                     </span>
                   </Link>
                 </li>
