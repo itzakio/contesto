@@ -13,6 +13,8 @@ import AdminRoute from "./AdminRoute";
 import CreateContest from "../DashBoard/CreateContest";
 import CreatorRoute from "./CreatorRoute";
 import Creators from "../DashBoard/Creators";
+import PendingContests from "../DashBoard/PendingContests";
+import MyContests from "../DashBoard/MyContests";
 
 const router = createBrowserRouter([
   {
@@ -38,8 +40,12 @@ const router = createBrowserRouter([
       },
       {
         path: "create-contest",
-        element: <CreatorRoute><CreateContest/></CreatorRoute>
-      }
+        element: (
+          <CreatorRoute>
+            <CreateContest />
+          </CreatorRoute>
+        ),
+      },
     ],
   },
   {
@@ -76,7 +82,24 @@ const router = createBrowserRouter([
             <Creators />
           </AdminRoute>
         ),
-      }
+      },
+      {
+        path: "pending-contests",
+        element: (
+          <AdminRoute>
+            <PendingContests />
+          </AdminRoute>
+        ),
+      },
+      //creator only routes
+      {
+        path: "my-contests",
+        element: (
+          <CreatorRoute>
+            <MyContests />
+          </CreatorRoute>
+        ),
+      },
     ],
   },
 ]);

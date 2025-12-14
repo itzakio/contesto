@@ -49,6 +49,19 @@ nav a.active {
   @apply text-primary;
 }
 
+.dashboard-nav a {
+  @apply py-3
+}
+
+.dashboard-nav a:hover {
+  @apply bg-gray-100 text-black;
+}
+
+.dashboard-nav a.active {
+  @apply bg-primary text-black;
+}
+
+
 .footer-link {
   @apply hover:translate-x-2 text-accent transition-all duration-100 cursor-pointer;
 }
@@ -64,6 +77,9 @@ nav a.active {
 }
 .margin-y {
   @apply my-6 md:my-8 lg:my-12 xl:my-16;
+}
+.padding-y {
+  @apply py-6 md:py-8 lg:py-12 xl:py-16;
 }
 
 

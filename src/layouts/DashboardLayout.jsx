@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "/logo.png";
-import { Link, Outlet } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 import { RiArrowLeftSLine, RiUserSettingsLine } from "react-icons/ri";
 import { HiOutlineSquaresPlus } from "react-icons/hi2";
 import useAuth from "../hooks/useAuth";
@@ -8,6 +8,7 @@ import Loading from "../Components/Loading";
 import { FaWpforms } from "react-icons/fa";
 import useRole from "../hooks/useRole";
 import { Toaster } from "react-hot-toast";
+import { LuClipboardPlus, LuClipboardCheck, LuClipboardList } from "react-icons/lu";
 
 const DashboardLayout = () => {
   const { userLoading } = useAuth();
@@ -71,7 +72,7 @@ const DashboardLayout = () => {
         <Outlet />
       </div>
 
-      <div className="drawer-side is-drawer-close:overflow-visible">
+      <div className="drawer-side is-drawer-close:overflow-visible dashboard-nav">
         <label
           htmlFor="my-drawer-4"
           aria-label="close sidebar"
@@ -108,7 +109,7 @@ const DashboardLayout = () => {
               <>
                 {/* List item */}
                 <li>
-                  <Link
+                  <NavLink
                     to="/create-contest"
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                     data-tip="Create Contest"
@@ -118,7 +119,22 @@ const DashboardLayout = () => {
                     <span className="is-drawer-close:hidden">
                       Create Contest
                     </span>
-                  </Link>
+                  </NavLink>
+                </li>
+                
+                {/* List item */}
+                <li>
+                  <NavLink
+                    to="/dashboard/my-contests"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="My Contests"
+                  >
+                    {/* User_Management */}
+                    <LuClipboardList size={20} />
+                    <span className="is-drawer-close:hidden">
+                      My Contests
+                    </span>
+                  </NavLink>
                 </li>
               </>
             )}
@@ -126,7 +142,7 @@ const DashboardLayout = () => {
               <>
                 {/* List item */}
                 <li>
-                  <Link
+                  <NavLink
                     to="/dashboard/users-management"
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                     data-tip="Users Management"
@@ -136,12 +152,12 @@ const DashboardLayout = () => {
                     <span className="is-drawer-close:hidden">
                       Users Management
                     </span>
-                  </Link>
+                  </NavLink>
                 </li>
 
                 {/* List item */}
                 <li>
-                  <Link
+                  <NavLink
                     to="/dashboard/pending-creators"
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                     data-tip="Creators"
@@ -151,7 +167,37 @@ const DashboardLayout = () => {
                     <span className="is-drawer-close:hidden">
                       Creators
                     </span>
-                  </Link>
+                  </NavLink>
+                </li>
+                
+                {/* List item */}
+                <li>
+                  <NavLink
+                    to="/dashboard/pending-contests"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Pending Contests"
+                  >
+                    {/*Creators_Application */}
+                    <LuClipboardPlus size={20} />
+                    <span className="is-drawer-close:hidden">
+                      Pending Contests
+                    </span>
+                  </NavLink>
+                </li>
+
+                {/* List item */}
+                <li>
+                  <NavLink
+                    to="/dashboard/approved-contests"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Approved Contests"
+                  >
+                    {/*Creators_Application */}
+                    <LuClipboardCheck  size={20} />
+                    <span className="is-drawer-close:hidden">
+                      Approved Contests
+                    </span>
+                  </NavLink>
                 </li>
               </>
             )}
