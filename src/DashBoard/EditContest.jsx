@@ -4,10 +4,18 @@ import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { useLocation, useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
 
-export default function CreateContest() {
-  const { user } = useAuth();
+const EditContest = () => {
   const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
+  const { id } = useParams();
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+
   const { data: currentCreator = [] } = useQuery({
     queryKey: ["creator", user.email],
     queryFn: async () => {
@@ -17,81 +25,117 @@ export default function CreateContest() {
   });
   const creator = currentCreator[0];
 
+  const { data: contest = {} } = useQuery({
+    queryKey: ["contest-to-edit", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/contests/${id}`);
+      setThumbnailUrl(res.data.contestThumbnail);
+      return res.data;
+    },
+  });
+
+  const isoToLocalDate = (iso) => {
+    if (!iso) return "";
+
+    const date = new Date(iso);
+    if (isNaN(date.getTime())) return "";
+
+    const offset = date.getTimezoneOffset();
+    const local = new Date(date.getTime() - offset * 60000);
+
+    return local.toISOString().slice(0, 10); // YYYY-MM-DD
+  };
+
+  const isoToLocalTime = (iso) => {
+    if (!iso) return "";
+
+    const date = new Date(iso);
+    if (isNaN(date.getTime())) return "";
+
+    const offset = date.getTimezoneOffset();
+    const local = new Date(date.getTime() - offset * 60000);
+
+    return local.toISOString().slice(11, 16); // HH:mm
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
 
-  const createContestHandler = (data) => {
-    const participationEndAt = new Date(`${data.endDate}T${data.endTime}`);
-    const coverImage = data.thumbnail[0];
-
-    // 1. store image in form data
-    const formData = new FormData();
-    formData.append("image", coverImage);
-    const image_API_URL = `https://api.imgbb.com/1/upload?key=${
-      import.meta.env.VITE_image_host_key
-    }`;
-    // 2. upload the image and get the url
-    axios.post(image_API_URL, formData).then((res) => {
-      const photoURL = res.data.data.url;
-
-      // create user in database
-
-      const contestData = {
-        title: data.title,
-        category: data.category,
-        description: data.description,
-        entryFee: Number(data.entryFee),
-        prize: Number(data.prize),
-        participationEndAt,
-        contestThumbnail: photoURL,
-        creatorEmail: user?.email,
-      };
-
-      Swal.fire({
-        title: `Are you sure you want to post this contest?`,
-        icon: "warning",
-        showCancelButton: true,
-        customClass: {
-          title: "swal-text",
-          htmlContainer: "swal-text",
-          confirmButton: "swal-confirm",
-          cancelButton: "swal-cancel",
-        },
-        confirmButtonText: "Confirm",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          axiosSecure.post("/contests", contestData).then((res) => {
-            if (res.data.insertedId) {
-              Swal.fire({
-                title: `Post submitted for admin approval!`,
-
-                icon: "success",
-                timer: 2500,
-                customClass: {
-                  title: "swal-text",
-                  htmlContainer: "swal-text",
-                  confirmButton: "swal-confirm",
-                },
-              });
-              reset();
-            }
-          });
-        }
+  useEffect(() => {
+    if (contest?.participationEndAt) {
+      reset({
+        endDate: isoToLocalDate(contest.participationEndAt),
+        endTime: isoToLocalTime(contest.participationEndAt),
+        category: contest.category,
       });
+    }
+  }, [contest, reset]);
+
+  // edit handler
+  const contestEditHandler = async (data) => {
+    let contestThumbnail = thumbnailUrl;
+
+    if (data.thumbnail && data.thumbnail.length > 0) {
+      const coverImage = data.thumbnail[0];
+
+      const formData = new FormData();
+      formData.append("image", coverImage);
+
+      const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_image_host_key
+      }`;
+
+      const imgRes = await axios.post(image_API_URL, formData);
+      contestThumbnail = imgRes.data.data.url;
+    }
+
+    const participationEndAt = new Date(
+      `${data.endDate}T${data.endTime}`
+    ).toISOString();
+
+    const contestDataUpdated = {
+      title: data.title,
+      category: data.category,
+      description: data.description,
+      entryFee: Number(data.entryFee),
+      prize: Number(data.prize),
+      participationEndAt,
+      contestThumbnail,
+    };
+
+    Swal.fire({
+      title: "Are you sure with the edit?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .patch(`/creator/contests/${contest._id}`, contestDataUpdated)
+          .then(() => {
+            Swal.fire({
+              title: "Contest edited!",
+              icon: "success",
+              timer: 2500,
+            });
+            navigate(location.state?location.state:'/dashboard/my-contests')
+          });
+      }
     });
-    // axios.post("/contests", contestData)
   };
 
   return (
-    <div data-aos="fade-up" data-aos-delay="0" className="card w-full max-w-lg mx-auto margin-y">
+    <div className="card w-full max-w-lg mx-auto margin-y">
       <div className="card-body">
-        <h2 className="text-3xl font-extrabold">Post a Contest</h2>
+        <h2 className="text-3xl font-extrabold text-primary">
+          Edit Your Contest Info
+        </h2>
 
-        <form onSubmit={handleSubmit(createContestHandler)}>
+        <form onSubmit={handleSubmit(contestEditHandler)}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Contest Thumbnail (full width) */}
             <div className="lg:col-span-2">
@@ -100,9 +144,7 @@ export default function CreateContest() {
                 type="file"
                 accept="image/*"
                 className="file-input file-input-bordered w-full"
-                {...register("thumbnail", {
-                  required: "Thumbnail image is required",
-                })}
+                {...register("thumbnail")}
               />
               {errors.thumbnail && (
                 <p className="text-red-500 text-sm">
@@ -115,6 +157,7 @@ export default function CreateContest() {
             <div className="lg:col-span-2">
               <label className="label font-semibold">Contest Title</label>
               <input
+                defaultValue={contest.title}
                 className="input w-full"
                 {...register("title", {
                   required: "Contest title is required",
@@ -134,7 +177,6 @@ export default function CreateContest() {
                   required: "Category is required",
                 })}
               >
-                <option value="">Select Category</option>
                 {creator?.categories?.map((cat, idx) => (
                   <option key={idx}>{cat}</option>
                 ))}
@@ -148,6 +190,7 @@ export default function CreateContest() {
             <div className="lg:col-span-2">
               <label className="label font-semibold">Description</label>
               <textarea
+                defaultValue={contest.description}
                 className="textarea w-full"
                 {...register("description", {
                   required: "Description is required",
@@ -166,6 +209,7 @@ export default function CreateContest() {
             <div>
               <label className="label font-semibold">Entry Fee</label>
               <input
+                defaultValue={contest.entryFee}
                 type="number"
                 onWheel={(e) => e.target.blur()}
                 className="input w-full"
@@ -183,6 +227,7 @@ export default function CreateContest() {
             <div>
               <label className="label font-semibold">Prize</label>
               <input
+                defaultValue={contest.prize}
                 type="number"
                 onWheel={(e) => e.target.blur()}
                 className="input w-full"
@@ -254,4 +299,6 @@ export default function CreateContest() {
       </div>
     </div>
   );
-}
+};
+
+export default EditContest;

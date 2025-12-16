@@ -15,6 +15,11 @@ import CreatorRoute from "./CreatorRoute";
 import Creators from "../DashBoard/Creators";
 import PendingContests from "../DashBoard/PendingContests";
 import MyContests from "../DashBoard/MyContests";
+import EditContest from "../DashBoard/EditContest";
+import ApprovedContests from "../DashBoard/ApprovedContests";
+import ContestDetails from "../pages/ContestDetails/ContestDetails";
+import PaymentSuccess from "../DashBoard/Payments/PaymentSuccess";
+import PaymentCancelled from "../DashBoard/Payments/PaymentCancelled";
 
 const router = createBrowserRouter([
   {
@@ -33,8 +38,15 @@ const router = createBrowserRouter([
         path: "be-a-creator",
         element: (
           <PrivateRoute>
-            {" "}
             <BeACreator />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/contests-details/:id",
+        element: (
+          <PrivateRoute>
+            <ContestDetails />
           </PrivateRoute>
         ),
       },
@@ -43,6 +55,14 @@ const router = createBrowserRouter([
         element: (
           <CreatorRoute>
             <CreateContest />
+          </CreatorRoute>
+        ),
+      },
+      {
+        path: "edit-contest/:id",
+        element: (
+          <CreatorRoute>
+            <EditContest />
           </CreatorRoute>
         ),
       },
@@ -91,6 +111,14 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      {
+        path: "approved-contests",
+        element: (
+          <AdminRoute>
+            <ApprovedContests />
+          </AdminRoute>
+        ),
+      },
       //creator only routes
       {
         path: "my-contests",
@@ -99,6 +127,14 @@ const router = createBrowserRouter([
             <MyContests />
           </CreatorRoute>
         ),
+      },
+      {
+        path: "payment-success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "payment-cancelled",
+        element: <PaymentCancelled />,
       },
     ],
   },

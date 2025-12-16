@@ -3,22 +3,28 @@ import React, { useState } from "react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Loading from "../Components/Loading";
 import useAuth from "../hooks/useAuth";
+import { Link, useLocation } from "react-router";
 
 const MyContests = () => {
   const [searchText, setSearchText] = useState("");
   const axiosSecure = useAxiosSecure();
-  const {user} = useAuth();
+  const location = useLocation();
+  const { user } = useAuth();
   const { data: contests = [], isLoading } = useQuery({
-    queryKey: ["my-contests"],
+    queryKey: ["my-contests", user.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/contests?email=${user.email}`);
+      const res = await axiosSecure.get(
+        `/creator/contests?email=${user.email}`
+      );
       return res.data;
     },
   });
   return (
     <div>
       <div className="flex items-center justify-between p-4">
-        <h3 className="text-2xl font-semibold">My Contests : {contests.length}</h3>
+        <h3 className="text-2xl font-semibold">
+          My Contests : {contests.length}
+        </h3>
         {/* search user */}
         <label className="input">
           <svg
@@ -103,17 +109,41 @@ const MyContests = () => {
                   </td>
                   <td>
                     <div className="flex justify-center gap-4">
-                      {
-                        <button disabled={contest?.status === "approved"} className="btn btn-primary text-black ">
+                      <div
+                        className={
+                          contest?.status === "approved"
+                            ? "cursor-not-allowed inline-block"
+                            : "inline-block"
+                        }
+                      >
+                        <Link
+                          state={location.pathname}
+                          to={`/edit-contest/${contest?._id}`}
+                          disabled={contest?.status === "approved"}
+                          className="btn btn-primary disabled:cursor-not-allowed text-black"
+                        >
                           Edit
-                        </button>
-                      }
+                        </Link>
+                      </div>
                     </div>
                   </td>
                   <td>
                     <div className="flex justify-center gap-4">
                       <button className="btn">details</button>
-                      <button className="btn btn-error">Delete</button>
+                      <div
+                        className={
+                          contest?.status === "approved"
+                            ? "cursor-not-allowed inline-block"
+                            : "inline-block"
+                        }
+                      >
+                        <button
+                          disabled={contest?.status === "approved"}
+                          className="btn btn-error text-black "
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </td>
                 </tr>

@@ -4,13 +4,13 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import Loading from "../Components/Loading";
 import Swal from "sweetalert2";
 
-const PendingContests = () => {
+const ApprovedContests = () => {
   const [searchText, setSearchText] = useState("");
   const axiosSecure = useAxiosSecure();
   const { data: contests, isLoading, refetch } = useQuery({
-    queryKey: ["pending-contests"],
+    queryKey: ["approved-contests"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/admin/contests?status=pending");
+      const res = await axiosSecure.get("/admin/contests?status=approved");
       return res.data;
     },
   });
@@ -85,7 +85,7 @@ const PendingContests = () => {
                 <th>Creator Info</th>
                 <th>Categories</th>
                 <th className="text-center">Status</th>
-                <th className="text-center">Admin Actions</th>
+               
                 <th className="text-center">More Actions</th>
               </tr>
             </thead>
@@ -122,34 +122,7 @@ const PendingContests = () => {
                       {contest?.status}
                     </p>
                   </td>
-                  <td>
-                    <div className="flex justify-center gap-4">
-                      {contest?.status !== "approved" && (
-                        <button
-                         onClick={()=>contestStatusUpdateHandler(contest?._id, 'approved')}
-                          className="btn btn-primary text-black"
-                        >
-                          Approve
-                        </button>
-                      )}
-                      {contest?.status === "pending" && (
-                        <button
-                          onClick={()=>contestStatusUpdateHandler(contest?._id, 'rejected')}
-                          className="btn btn-error"
-                        >
-                          Reject
-                        </button>
-                      )}
-                      {contest?.status === "approved" && (
-                        <button
-                          
-                          className="btn btn-error"
-                        >
-                          Deactivate
-                        </button>
-                      )}
-                    </div>
-                  </td>
+                 
                   <td>
                     <div className="flex justify-center gap-4">
                       <button className="btn">details</button>
@@ -166,4 +139,4 @@ const PendingContests = () => {
   );
 };
 
-export default PendingContests;
+export default ApprovedContests;

@@ -160,14 +160,14 @@ const Navbar = () => {
             {user ? (
               <button
                 onClick={() => logOutUser()}
-                className="py-2 px-3 cursor-pointer font-medium bg-primary text-white"
+                className="py-2 px-3 cursor-pointer font-medium bg-primary text-black"
               >
                 Logout
               </button>
             ) : (
               <Link
                 to="/login"
-                className="btn rounded-none py-2 px-3 font-medium bg-primary text-white"
+                className="btn rounded-none py-2 px-3 font-medium bg-primary text-black"
               >
                 Login
               </Link>
@@ -190,7 +190,7 @@ const Navbar = () => {
       >
         <div className="flex justify-between items-center w-full mb-4">
           <div
-            className="bg-primary p-2 rounded-full text-white"
+            className="bg-primary p-2 rounded-full text-white cursor-pointer"
             onClick={() => setShow(!show)}
           >
             <RxCrossCircled size={24} />

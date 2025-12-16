@@ -14,20 +14,24 @@ const BeACreator = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
 
-  const beACreatorHandler = (data) => {
-    data.photoURL = user.photoURL
-    console.log(data);
-    axiosSecure.post("/creators", data).then((res) => {
-      if (res.data.message) {
-        return toast.error(res.data.message);
+  const beACreatorHandler = async (data) => {
+    try {
+      data.photoURL = user.photoURL;
+
+      const res = await axiosSecure.post("/creators", data);
+
+      if (res.data?.message) {
+        toast.error(res.data.message);
+        return;
       }
-      if (res.data.insertedId) {
+ 
+      if (res.data?.insertedId) {
         Swal.fire({
           title: "Application Submitted!",
-          text: "Your application has been submitted, We will reach out you within 7 days!",
+          text: "Your application has been submitted. We will reach out within 7 days!",
           icon: "success",
           timer: 15000,
           customClass: {
@@ -38,14 +42,23 @@ const BeACreator = () => {
         });
         reset();
       }
-    });
+    } catch (error) {
+      const errorMsg =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+
+      toast.error(errorMsg);
+    }
   };
+
   return (
     <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2">
       <div data-aos="fade-right">
         <div className="card w-full max-w-sm mx-auto mt-10 ">
           <div className="card-body">
-            <h2 className="text-4xl font-extrabold mb-2 text-primary">Become a Creator</h2>
+            <h2 className="text-4xl font-extrabold mb-2 text-primary">
+              Become a Creator
+            </h2>
             <p className="text-lg mb-4">Fill out the form to host contests</p>
 
             <form onSubmit={handleSubmit(beACreatorHandler)}>
