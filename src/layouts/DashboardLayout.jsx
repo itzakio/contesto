@@ -8,7 +8,11 @@ import Loading from "../Components/Loading";
 import { FaWpforms } from "react-icons/fa";
 import useRole from "../hooks/useRole";
 import { Toaster } from "react-hot-toast";
-import { LuClipboardPlus, LuClipboardCheck, LuClipboardList } from "react-icons/lu";
+import {
+  LuClipboardPlus,
+  LuClipboardCheck,
+  LuClipboardList,
+} from "react-icons/lu";
 
 const DashboardLayout = () => {
   const { userLoading } = useAuth();
@@ -121,7 +125,7 @@ const DashboardLayout = () => {
                     </span>
                   </NavLink>
                 </li>
-                
+
                 {/* List item */}
                 <li>
                   <NavLink
@@ -131,9 +135,7 @@ const DashboardLayout = () => {
                   >
                     {/* User_Management */}
                     <LuClipboardList size={20} />
-                    <span className="is-drawer-close:hidden">
-                      My Contests
-                    </span>
+                    <span className="is-drawer-close:hidden">My Contests</span>
                   </NavLink>
                 </li>
               </>
@@ -164,12 +166,10 @@ const DashboardLayout = () => {
                   >
                     {/*Creators_Application */}
                     <FaWpforms size={20} />
-                    <span className="is-drawer-close:hidden">
-                      Creators
-                    </span>
+                    <span className="is-drawer-close:hidden">Creators</span>
                   </NavLink>
                 </li>
-                
+
                 {/* List item */}
                 <li>
                   <NavLink
@@ -193,9 +193,28 @@ const DashboardLayout = () => {
                     data-tip="Approved Contests"
                   >
                     {/*Creators_Application */}
-                    <LuClipboardCheck  size={20} />
+                    <LuClipboardCheck size={20} />
                     <span className="is-drawer-close:hidden">
                       Approved Contests
+                    </span>
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {role?.role === "user" && (
+              <>
+                {/* List item */}
+                <li>
+                  <NavLink
+                    to="/dashboard/my-joined-contests"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="  My Joined Contests"
+                  >
+                    {/*Creators_Application */}
+                    <LuClipboardList size={20} />
+                    <span className="is-drawer-close:hidden">
+                      My Joined Contests
                     </span>
                   </NavLink>
                 </li>
@@ -230,7 +249,7 @@ const DashboardLayout = () => {
           </ul>
         </div>
       </div>
-       <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

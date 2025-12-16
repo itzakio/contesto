@@ -20,6 +20,8 @@ import ApprovedContests from "../DashBoard/ApprovedContests";
 import ContestDetails from "../pages/ContestDetails/ContestDetails";
 import PaymentSuccess from "../DashBoard/Payments/PaymentSuccess";
 import PaymentCancelled from "../DashBoard/Payments/PaymentCancelled";
+import UserRoute from "./UserRoute";
+import UserJoinedContests from "../DashBoard/UserDashboard/UserJoinedContests";
 
 const router = createBrowserRouter([
   {
@@ -126,6 +128,15 @@ const router = createBrowserRouter([
           <CreatorRoute>
             <MyContests />
           </CreatorRoute>
+        ),
+      },
+      // user only route
+      {
+        path: "my-joined-contests",
+        element: (
+          <UserRoute>
+            <UserJoinedContests />
+          </UserRoute>
         ),
       },
       {

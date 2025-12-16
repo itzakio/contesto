@@ -9,7 +9,7 @@ import useAuth from "../../hooks/useAuth";
 const ContestDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
-  const {user} = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
 
   const {
@@ -55,9 +55,12 @@ const ContestDetails = () => {
         entryFee,
         contestId: contest._id,
         contestName: title,
-        userEmail: user.email
+        userEmail: user.email,
       };
-      const res = await axiosSecure.post("/payment-checkout-session", paymentInfo);
+      const res = await axiosSecure.post(
+        "/payment-checkout-session",
+        paymentInfo
+      );
 
       if (res.data?.url) {
         window.location.assign(res.data.url);
@@ -90,7 +93,7 @@ const ContestDetails = () => {
   };
 
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   if (isError) {
@@ -156,16 +159,23 @@ const ContestDetails = () => {
             <h2 className="text-2xl font-bold mb-4">Submit Your Project</h2>
 
             <form onSubmit={handleSubmitProject}>
-              <label className="label font-semibold">Project URL</label>
-              <input
-                type="url"
+              <label className="label font-semibold">
+                Project Details / Links
+              </label>
+
+              <textarea
                 name="projectLink"
                 required
-                placeholder="GitHub / Drive / Live URL"
-                className="input input-bordered w-full"
+                rows={5}
+                placeholder={`Paste your links or details here:
+- GitHub repo
+- Live demo
+- Drive link
+- Description`}
+                className="textarea textarea-bordered w-full resize-none"
               />
 
-              <button className="btn btn-success mt-4 w-full">
+              <button className="btn btn-primary text-black mt-4 w-full">
                 Submit Project
               </button>
             </form>
