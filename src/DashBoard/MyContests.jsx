@@ -4,13 +4,18 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import Loading from "../Components/Loading";
 import useAuth from "../hooks/useAuth";
 import { Link, useLocation } from "react-router";
+import Swal from "sweetalert2";
 
 const MyContests = () => {
   const [searchText, setSearchText] = useState("");
   const axiosSecure = useAxiosSecure();
   const location = useLocation();
   const { user } = useAuth();
-  const { data: contests = [], isLoading } = useQuery({
+  const {
+    data: contests = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["my-contests", user.email],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -19,6 +24,29 @@ const MyContests = () => {
       return res.data;
     },
   });
+
+  const contestDeleteHandler = (id) => {
+    Swal.fire({
+      title: `Are you sure you want to delete this contest?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/contests/${id}`).then((res) => {
+          if (res.data.deletedCount) {
+            Swal.fire({
+              title: `Contest deleted successfully!`,
+              icon: "success",
+              timer: 2500,
+            });
+            refetch();
+          }
+        });
+      }
+    });
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between p-4">
@@ -129,7 +157,12 @@ const MyContests = () => {
                   </td>
                   <td>
                     <div className="flex justify-center gap-4">
-                      <button className="btn">details</button>
+                      <Link
+                        to={`/contests-details/${contest._id}`}
+                        className="btn text-black"
+                      >
+                        View Details
+                      </Link>
                       <div
                         className={
                           contest?.status === "approved"
@@ -138,6 +171,7 @@ const MyContests = () => {
                         }
                       >
                         <button
+                          onClick={() => contestDeleteHandler(contest?._id)}
                           disabled={contest?.status === "approved"}
                           className="btn btn-error text-black "
                         >

@@ -17,166 +17,117 @@ const UserJoinedContests = () => {
   });
   console.log(contests);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  // const {title, contestThumbnail, prize, category, participationEndAt} = contests?.contest;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {contests.map((item, index) => (
-        <div key={index} className="card bg-base-100 shadow-lg">
-          <figure>
-            <img src={item.contest.contestThumbnail} alt="" />
-          </figure>
+    <div>
+      <div className="flex items-center justify-between p-4">
+        <h3 className="text-2xl font-semibold">
+          My Participate Contests : {contests.length}
+        </h3>
+        {/* search user */}
+        <label className="input">
+          <svg
+            className="h-[1em] opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <g
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              strokeWidth="2.5"
+              fill="none"
+              stroke="currentColor"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </g>
+          </svg>
+          <input
+            type="text"
+            placeholder="Search pending contests"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") e.preventDefault();
+            }}
+          />
+        </label>
+      </div>
 
-          <div className="card-body">
-            <h2 className="card-title">{item.contest.title}</h2>
-            <p>🏆 Prize: ${item.contest.prize}</p>
-            <p>
-              ⏰ Ends:{" "}
-              {new Date(item.contest.participationEndAt).toLocaleDateString()}
-            </p>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="overflow-x-auto table-zebra bg-base-100">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Contest Info</th>
+                <th>Category</th>
+                <th className="text-center">Contest End Time</th>
+                <th className="text-center">Prize</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
 
-            <button className="btn btn-outline btn-primary btn-sm mt-3">
-              View Details
-            </button>
-          </div>
+            <tbody>
+              {contests.map((item, index) => (
+                <tr key={item._id}>
+                  {/* index */}
+                  <td>{index + 1}</td>
+
+                  {/* contest info */}
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="avatar">
+                        <div className="mask mask-squircle h-12 w-12">
+                          <img
+                            src={item.contest.contestThumbnail}
+                            alt={item.contest.title}
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="font-bold">{item.contest.title}</div>
+                        <div className="text-sm opacity-50">
+                          Entry Fee: ${item.contest.entryFee}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* category */}
+                  <td>{item.contest.category}</td>
+
+                  {/* joined date */}
+                  <td className="text-center">
+                    {new Date(item.contest.participationEndAt).toLocaleString()}
+                  </td>
+
+                  {/* status */}
+                  <td className="text-center">${item.contest.prize}</td>
+
+                  {/* actions */}
+                  <td className="text-center">
+                    <div className="flex justify-center gap-3">
+                      <Link
+                        to={`/contests-details/${item.contest._id}`}
+                        className="btn text-black"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      ))}
+      )}
     </div>
-    // <div>
-    //   <div className="flex items-center justify-between p-4">
-    //     <h3 className="text-2xl font-semibold">
-    //       My Contests : {contests.length}
-    //     </h3>
-    //     {/* search user */}
-    //     <label className="input">
-    //       <svg
-    //         className="h-[1em] opacity-50"
-    //         xmlns="http://www.w3.org/2000/svg"
-    //         viewBox="0 0 24 24"
-    //       >
-    //         <g
-    //           strokeLinejoin="round"
-    //           strokeLinecap="round"
-    //           strokeWidth="2.5"
-    //           fill="none"
-    //           stroke="currentColor"
-    //         >
-    //           <circle cx="11" cy="11" r="8"></circle>
-    //           <path d="m21 21-4.3-4.3"></path>
-    //         </g>
-    //       </svg>
-    //       <input
-    //         type="text"
-    //         placeholder="Search pending contests"
-    //         value={searchText}
-    //         onChange={(e) => setSearchText(e.target.value)}
-    //         onKeyDown={(e) => {
-    //           if (e.key === "Enter") e.preventDefault();
-    //         }}
-    //       />
-    //     </label>
-    //   </div>
-
-    //   {isLoading ? (
-    //     <Loading />
-    //   ) : (
-    //     <div className="overflow-x-auto table-zebra bg-base-100">
-    //       <table className="table">
-    //         {/* head */}
-    //         <thead>
-    //           <tr>
-    //             <th>#</th>
-    //             <th>Creator Info</th>
-    //             <th>Categories</th>
-    //             <th className="text-center">Status</th>
-    //             <th className="text-center">Actions</th>
-    //             <th className="text-center">More Actions</th>
-    //           </tr>
-    //         </thead>
-    //         <tbody>
-    //           {contests.map((contest, index) => (
-    //             <tr key={contest?._id}>
-    //               <td>{index + 1}</td>
-    //               <td>
-    //                 <div className="flex items-center gap-3">
-    //                   <div className="avatar">
-    //                     <div className="mask mask-squircle h-12 w-12">
-    //                       <img
-    //                         src={contest?.contestThumbnail}
-    //                         alt="creator? photo"
-    //                       />
-    //                     </div>
-    //                   </div>
-    //                   <div>
-    //                     <div className="font-bold">{contest?.title}</div>
-    //                     <div className="text-sm opacity-50">
-    //                       Creator Email: {contest?.creatorEmail}
-    //                     </div>
-    //                   </div>
-    //                 </div>
-    //               </td>
-    //               <td>{contest?.category}</td>
-    //               <td>
-    //                 <p
-    //                   className={`rounded-full w-fit p-1 px-2 mx-auto text-black ${
-    //                     contest?.status === "pending"
-    //                       ? "bg-yellow-300"
-    //                       : contest?.status === "approved"
-    //                       ? "bg-green-300"
-    //                       : "bg-red-300"
-    //                   }`}
-    //                 >
-    //                   {contest?.status}
-    //                 </p>
-    //               </td>
-    //               <td>
-    //                 <div className="flex justify-center gap-4">
-    //                   <div
-    //                     className={
-    //                       contest?.status === "approved"
-    //                         ? "cursor-not-allowed inline-block"
-    //                         : "inline-block"
-    //                     }
-    //                   >
-    //                     <Link
-    //                       state={location.pathname}
-    //                       to={`/edit-contest/${contest?._id}`}
-    //                       disabled={contest?.status === "approved"}
-    //                       className="btn btn-primary disabled:cursor-not-allowed text-black"
-    //                     >
-    //                       Edit
-    //                     </Link>
-    //                   </div>
-    //                 </div>
-    //               </td>
-    //               <td>
-    //                 <div className="flex justify-center gap-4">
-    //                   <button className="btn">details</button>
-    //                   <div
-    //                     className={
-    //                       contest?.status === "approved"
-    //                         ? "cursor-not-allowed inline-block"
-    //                         : "inline-block"
-    //                     }
-    //                   >
-    //                     <button
-    //                       disabled={contest?.status === "approved"}
-    //                       className="btn btn-error text-black "
-    //                     >
-    //                       Delete
-    //                     </button>
-    //                   </div>
-    //                 </div>
-    //               </td>
-    //             </tr>
-    //           ))}
-    //         </tbody>
-    //       </table>
-    //     </div>
-    //   )}
-    // </div>
   );
 };
 

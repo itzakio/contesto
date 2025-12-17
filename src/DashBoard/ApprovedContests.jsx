@@ -16,6 +16,7 @@ const ApprovedContests = () => {
   });
 
 
+  // in future it will be use for resubmit the contest
   const contestStatusUpdateHandler = (id, status)=>{
     const updatedStatus = {status}
      Swal.fire({

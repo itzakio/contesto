@@ -7,7 +7,11 @@ import Swal from "sweetalert2";
 const PendingContests = () => {
   const [searchText, setSearchText] = useState("");
   const axiosSecure = useAxiosSecure();
-  const { data: contests, isLoading, refetch } = useQuery({
+  const {
+    data: contests,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["pending-contests"],
     queryFn: async () => {
       const res = await axiosSecure.get("/admin/contests?status=pending");
@@ -15,34 +19,33 @@ const PendingContests = () => {
     },
   });
 
-
-  const contestStatusUpdateHandler = (id, status)=>{
-    const updatedStatus = {status}
-     Swal.fire({
-          title: `Are you sure you want to ${status} this contest?`,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Confirm",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            axiosSecure
-              .patch(`/admin/contests/${id}`, updatedStatus)
-              .then(() => {
-                Swal.fire({
-                  title: `Contest ${status}!`,
-                  icon: "success",
-                  timer: 2500,
-                });
-                refetch()
-              });
-          }
+  const contestStatusUpdateHandler = (id, status) => {
+    const updatedStatus = { status };
+    Swal.fire({
+      title: `Are you sure you want to ${status} this contest?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.patch(`/admin/contests/${id}`, updatedStatus).then(() => {
+          Swal.fire({
+            title: `Contest ${status}!`,
+            icon: "success",
+            timer: 2500,
+          });
+          refetch();
         });
-  }
+      }
+    });
+  };
 
   return (
     <div>
       <div className="flex items-center justify-between p-4">
-        <h3 className="text-2xl font-semibold">Pending Contests : {contests?.length}</h3>
+        <h3 className="text-2xl font-semibold">
+          Pending Contests : {contests?.length}
+        </h3>
         {/* search user */}
         <label className="input">
           <svg
@@ -97,7 +100,10 @@ const PendingContests = () => {
                     <div className="flex items-center gap-3">
                       <div className="avatar">
                         <div className="mask mask-squircle h-12 w-12">
-                          <img src={contest?.contestThumbnail} alt="creator? photo" />
+                          <img
+                            src={contest?.contestThumbnail}
+                            alt="creator? photo"
+                          />
                         </div>
                       </div>
                       <div>
@@ -126,7 +132,9 @@ const PendingContests = () => {
                     <div className="flex justify-center gap-4">
                       {contest?.status !== "approved" && (
                         <button
-                         onClick={()=>contestStatusUpdateHandler(contest?._id, 'approved')}
+                          onClick={() =>
+                            contestStatusUpdateHandler(contest?._id, "approved")
+                          }
                           className="btn btn-primary text-black"
                         >
                           Approve
@@ -134,18 +142,12 @@ const PendingContests = () => {
                       )}
                       {contest?.status === "pending" && (
                         <button
-                          onClick={()=>contestStatusUpdateHandler(contest?._id, 'rejected')}
+                          onClick={() =>
+                            contestStatusUpdateHandler(contest?._id, "rejected")
+                          }
                           className="btn btn-error"
                         >
                           Reject
-                        </button>
-                      )}
-                      {contest?.status === "approved" && (
-                        <button
-                          
-                          className="btn btn-error"
-                        >
-                          Deactivate
                         </button>
                       )}
                     </div>
@@ -153,7 +155,6 @@ const PendingContests = () => {
                   <td>
                     <div className="flex justify-center gap-4">
                       <button className="btn">details</button>
-                     
                     </div>
                   </td>
                 </tr>

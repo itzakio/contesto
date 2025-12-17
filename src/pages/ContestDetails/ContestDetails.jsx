@@ -5,6 +5,7 @@ import CountdownTimer from "../../Components/CountdownTimer";
 import Loading from "../../Components/Loading";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
+import SubmissionForm from "./SubmissionForm";
 
 const ContestDetails = () => {
   const { id } = useParams();
@@ -35,6 +36,21 @@ const ContestDetails = () => {
   });
 
   const hasPaid = paymentInfo?.paid;
+  console.log(hasPaid)
+
+ const { data:Pcount, isLoading:paymentLoading } = useQuery({
+  queryKey: ["participants-count", contest._id],
+  queryFn: async () => {
+    const res = await axiosSecure.get(
+      `/contests/${contest._id}/participants-count`
+    );
+    return res.data;
+  },
+  enabled: !!contest?._id,
+});
+
+const participantCount = Pcount?.count || 0;
+
 
   const {
     title,
@@ -48,7 +64,7 @@ const ContestDetails = () => {
   const deadlinePassed =
     new Date(participationEndAt).getTime() < new Date().getTime();
 
-  // PAYMENT HANDLER
+
   const paymentHandler = async () => {
     try {
       const paymentInfo = {
@@ -70,29 +86,10 @@ const ContestDetails = () => {
     }
   };
 
-  // SUBMIT PROJECT
-  const handleSubmitProject = async (e) => {
-    e.preventDefault();
-    const projectLink = e.target.projectLink.value;
 
-    try {
-      await axiosSecure.post("/submissions", {
-        contestId: contest._id,
-        projectLink,
-      });
 
-      Swal.fire("Success", "Project submitted successfully!", "success");
-      e.target.reset();
-    } catch (error) {
-      Swal.fire(
-        "Error",
-        error.response?.data?.message || "Submission failed",
-        "error"
-      );
-    }
-  };
 
-  if (isLoading) {
+  if (isLoading || paymentLoading) {
     return <Loading />;
   }
 
@@ -128,6 +125,9 @@ const ContestDetails = () => {
               ⏰ <strong>Deadline:</strong>{" "}
               {new Date(participationEndAt).toLocaleString()}
             </p>
+            <p>
+              😊 <strong>Participants:</strong> {participantCount}
+            </p>
           </div>
 
           {/* COUNTDOWN */}
@@ -154,33 +154,7 @@ const ContestDetails = () => {
 
       {/* SUBMISSION FORM */}
       {hasPaid && !deadlinePassed && (
-        <div className="mt-14 card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="text-2xl font-bold mb-4">Submit Your Project</h2>
-
-            <form onSubmit={handleSubmitProject}>
-              <label className="label font-semibold">
-                Project Details / Links
-              </label>
-
-              <textarea
-                name="projectLink"
-                required
-                rows={5}
-                placeholder={`Paste your links or details here:
-- GitHub repo
-- Live demo
-- Drive link
-- Description`}
-                className="textarea textarea-bordered w-full resize-none"
-              />
-
-              <button className="btn btn-primary text-black mt-4 w-full">
-                Submit Project
-              </button>
-            </form>
-          </div>
-        </div>
+       <SubmissionForm contest={contest}/>
       )}
     </div>
   );

@@ -96,6 +96,7 @@ const BeACreator = () => {
                   },
                 })}
                 defaultValue={user?.email}
+                readOnly
                 type="email"
                 placeholder="Enter Your Email"
                 className="input w-full text-base placeholder:text-accent"
