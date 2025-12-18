@@ -22,6 +22,7 @@ import PaymentSuccess from "../DashBoard/Payments/PaymentSuccess";
 import PaymentCancelled from "../DashBoard/Payments/PaymentCancelled";
 import UserRoute from "./UserRoute";
 import UserJoinedContests from "../DashBoard/UserDashboard/UserJoinedContests";
+import ContestSubmissions from "../DashBoard/CreatorDashboard/ContestSubmissions";
 
 const router = createBrowserRouter([
   {
@@ -39,9 +40,9 @@ const router = createBrowserRouter([
       {
         path: "be-a-creator",
         element: (
-          <PrivateRoute>
+          <UserRoute>
             <BeACreator />
-          </PrivateRoute>
+          </UserRoute>
         ),
       },
       {
@@ -127,6 +128,14 @@ const router = createBrowserRouter([
         element: (
           <CreatorRoute>
             <MyContests />
+          </CreatorRoute>
+        ),
+      },
+      {
+        path: "contest/:contestId/submissions",
+        element: (
+          <CreatorRoute>
+            <ContestSubmissions />
           </CreatorRoute>
         ),
       },

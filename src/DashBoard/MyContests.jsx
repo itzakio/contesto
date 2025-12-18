@@ -177,6 +177,12 @@ const MyContests = () => {
                         >
                           Delete
                         </button>
+                        <Link
+                          to={`/dashboard/contest/${contest._id}/submissions`}
+                          className="btn btn-outline"
+                        >
+                          See Submissions
+                        </Link>
                       </div>
                     </div>
                   </td>

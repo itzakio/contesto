@@ -46,10 +46,11 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/all-contests">
         All Contests
       </NavLink>
-
-      <NavLink className="nav-links" to="/be-a-creator">
-        Be A Creator
-      </NavLink>
+      {role?.role.role === "user" && (
+        <NavLink className="nav-links" to="/be-a-creator">
+          Be A Creator
+        </NavLink>
+      )}
       {role?.role.role === "creator" && (
         <>
           <NavLink className="nav-links" to="/create-contest">
