@@ -68,6 +68,7 @@ const UserJoinedContests = () => {
                 <th>Category</th>
                 <th className="text-center">Contest End Time</th>
                 <th className="text-center">Prize</th>
+                <th className="text-center">Result</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -109,6 +110,21 @@ const UserJoinedContests = () => {
 
                   {/* status */}
                   <td className="text-center">${item.contest.prize}</td>
+
+                  {/* result */}
+                  <td className="text-center">
+                    {item.submissionStatus === "winner" && (
+                      <span className="badge badge-success">🏆 Winner</span>
+                    )}
+
+                    {item.submissionStatus === "lost" && (
+                      <span className="badge badge-error">❌ Lost</span>
+                    )}
+
+                    {item.submissionStatus === "pending" && (
+                      <span className="badge badge-outline">⏳ Pending</span>
+                    )}
+                  </td>
 
                   {/* actions */}
                   <td className="text-center">

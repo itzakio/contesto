@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import Loading from "../../Components/Loading";
 
 const ContestSubmissions = () => {
   const { contestId } = useParams();
@@ -61,11 +62,7 @@ const ContestSubmissions = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center mt-16">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
+    return <Loading/>
   }
 
   if (isError) {
@@ -88,8 +85,7 @@ const ContestSubmissions = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>User</th>
-                <th>Email</th>
+                <th>User Info</th>
                 <th>Status</th>
                 <th className="text-center">Actions</th>
               </tr>
@@ -100,20 +96,21 @@ const ContestSubmissions = () => {
                   <td>{index + 1}</td>
 
                   {/* 👤 User info */}
-                  <td className="flex items-center gap-3">
-                    <img
-                      src={
-                        sub.user?.photoURL ||
-                        "https://img.freepik.com/premium-vector/user-profile-icon-circle_1256048-12499.jpg?semt=ais_hybrid&w=740&q=80"
-                      }
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <span className="font-semibold">
-                      {sub.user?.name || "Unknown"}
-                    </span>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="avatar">
+                        <div className="mask mask-squircle h-12 w-12">
+                          <img src={sub.user?.photoURL ||
+                        "https://img.freepik.com/premium-vector/user-profile-icon-circle_1256048-12499.jpg?semt=ais_hybrid&w=740&q=80"} alt="user photo" />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold">{sub.user?.name || "Unknown"}</div>
+                        <div className="text-sm opacity-50">{sub.user?.email}</div>
+                      </div>
+                    </div>
                   </td>
 
-                  <td>{sub.user?.email}</td>
 
                   {/* 🏷 Status */}
                   <td>

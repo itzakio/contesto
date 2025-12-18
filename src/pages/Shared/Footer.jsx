@@ -1,7 +1,6 @@
 import React from "react";
 import logo from "/logo.png";
-import { FaFacebook } from "react-icons/fa";
-import { PiInstagramLogoFill } from "react-icons/pi";
+import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { TbBrandYoutubeFilled } from "react-icons/tb";
 
@@ -16,10 +15,16 @@ const Footer = () => {
       </div>
 
       <div data-aos="fade-up" data-aos-delay="200">
-        <h6 className="title-footer">Library</h6>
-        <a className="footer-link">Genres</a>
-        <a className="footer-link">Languages</a>
-        <a className="footer-link">Authors</a>
+        <h6 className="title-footer">Category</h6>
+        <a className="footer-link">Quiz</a>
+        <a className="footer-link">Coding</a>
+        <a className="footer-link">Creative Design</a>
+        <a className="footer-link">Writing</a>
+        <a className="footer-link">Photography</a>
+        <a className="footer-link">Idea Pitch</a>
+        <a className="footer-link">Photography</a>
+        <a className="footer-link">Logic & Puzzle</a>
+        <a className="footer-link">Gaming (Score-based)</a>
       </div>
 
       <div data-aos="fade-up" data-aos-delay="300">
@@ -37,7 +42,7 @@ const Footer = () => {
             <FaFacebook className="cursor-pointer "  size={28} />
           </div>
          <div className="tooltip" data-tip="Instagram">
-             <PiInstagramLogoFill className="cursor-pointer"  size={28} />
+             <FaLinkedin className="cursor-pointer"  size={28} />
          </div>
           <div className="tooltip" data-tip="X">
             <FaXTwitter className="cursor-pointer"  size={28} />

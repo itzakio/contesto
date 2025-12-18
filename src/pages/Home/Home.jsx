@@ -4,6 +4,7 @@ import TextPressure from "../../Components/TextPressure";
 import logo from "/logo.png";
 import Loading from "../../Components/Loading";
 import Forbidden from "../../Components/Forbidden";
+import PopularContests from "../Shared/PopularContests";
 
 const Home = () => {
   return (
@@ -80,6 +81,7 @@ const Home = () => {
           </form>
         </div>
       </div>
+      <PopularContests/>
           <Forbidden/>
         <Loading/>
     </div>

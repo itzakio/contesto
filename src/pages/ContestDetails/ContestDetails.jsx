@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import CountdownTimer from "../../Components/CountdownTimer";
@@ -6,6 +6,7 @@ import Loading from "../../Components/Loading";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import SubmissionForm from "./SubmissionForm";
+import { FaArrowLeft } from "react-icons/fa";
 
 const ContestDetails = () => {
   const { id } = useParams();
@@ -36,7 +37,7 @@ const ContestDetails = () => {
   });
 
   const hasPaid = paymentInfo?.paid;
-  console.log(hasPaid)
+
 
  const { data:Pcount, isLoading:paymentLoading } = useQuery({
   queryKey: ["participants-count", contest._id],
@@ -105,11 +106,14 @@ const participantCount = Pcount?.count || 0;
     <div className="max-w-6xl mx-auto p-6 margin-y">
       {/* HEADER */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <img
+        <div className="flex flex-col">
+          <Link className="btn btn-primary text-black w-fit mb-4" to={location.state? location.state : "/all-contests"}><FaArrowLeft size={20}/> Back</Link>
+          <img
           src={contestThumbnail}
           alt={title}
           className="rounded-xl shadow-lg w-full"
         />
+        </div>
 
         <div>
           <h1 className="text-3xl font-bold">{title}</h1>
