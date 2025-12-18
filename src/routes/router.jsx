@@ -23,6 +23,8 @@ import PaymentCancelled from "../DashBoard/Payments/PaymentCancelled";
 import UserRoute from "./UserRoute";
 import UserJoinedContests from "../DashBoard/UserDashboard/UserJoinedContests";
 import ContestSubmissions from "../DashBoard/CreatorDashboard/ContestSubmissions";
+import AboutUs from "../pages/AboutUs/AboutUs";
+import HowItWorks from "../pages/HowItWorks/HowItWorks";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
           </CreatorRoute>
         ),
       },
+      {
+        path: "about-us",
+        element: <AboutUs/>
+      },
+      {
+        path: "how-it-works",
+        element: <HowItWorks/>
+      }
     ],
   },
   {

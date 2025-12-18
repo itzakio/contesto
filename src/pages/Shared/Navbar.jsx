@@ -58,6 +58,12 @@ const Navbar = () => {
           </NavLink>
         </>
       )}
+      <NavLink className="nav-links" to="/how-it-works">
+        How It Works
+      </NavLink>
+      <NavLink className="nav-links" to="/about-us">
+        About Us
+      </NavLink>
       <NavLink className="nav-links" to="/dashboard">
         Dashboard
       </NavLink>
@@ -161,14 +167,14 @@ const Navbar = () => {
             {user ? (
               <button
                 onClick={() => logOutUser()}
-                className="py-2 px-3 cursor-pointer font-medium bg-primary text-black"
+                className="btn font-medium bg-primary text-black"
               >
                 Logout
               </button>
             ) : (
               <Link
                 to="/login"
-                className="btn rounded-none py-2 px-3 font-medium bg-primary text-black"
+                className="btn font-medium bg-primary text-black"
               >
                 Login
               </Link>
@@ -266,14 +272,11 @@ const Navbar = () => {
             </p>
           </div>
           {user ? (
-            <Link className="py-2 px-3 font-medium bg-primary text-white">
+            <Link className="btn font-medium bg-primary text-black">
               View Profile
             </Link>
           ) : (
-            <Link
-              to="/login"
-              className="py-2 px-3 font-medium bg-primary text-white"
-            >
+            <Link to="/login" className="btn font-medium bg-primary text-black">
               Login
             </Link>
           )}
@@ -285,7 +288,7 @@ const Navbar = () => {
         {user && (
           <button
             onClick={() => logOutUser()}
-            className="py-2 px-3 cursor-pointer font-medium bg-primary text-white absolute bottom-8"
+            className="btn font-medium bg-primary text-black absolute bottom-8"
           >
             Logout
           </button>
