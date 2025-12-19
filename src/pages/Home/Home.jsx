@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Banner from "../Shared/Banner";
 import TextPressure from "../../Components/TextPressure";
 import logo from "/logo.png";
-import Loading from "../../Components/Loading";
-import Forbidden from "../../Components/Forbidden";
 import PopularContests from "../Shared/PopularContests";
+import FullSearchModal from "../../Components/FullSearchModal";
+import WinnerAdvertisement from "../Shared/WinnerAdvertisement";
 
 const Home = () => {
+  const [openSearch, setOpenSearch] = useState(false);
+
   return (
     <div className="relative ">
-    
       <Banner />
 
       <div className="absolute hidden xl:block w-[1200px] h-[500px] top-0 xl:top-10 left-1/2 -translate-x-1/2 ">
@@ -62,16 +63,19 @@ const Home = () => {
             Creativity.
           </span>
         </p>
-        <div className="mt-8">
+        <div
+          className="mt-8 cursor-pointer"
+          onClick={() => setOpenSearch(true)}
+        >
           <form
-            className="w-60 lg:w-80 xl:w-96 h-10 flex items-center bg-amber-300 rounded-full overflow-hidden relative "
-            data-aos="fade-up"
-            data-aos-delay="600"
+            onSubmit={(e) => e.preventDefault()}
+            className="w-60 lg:w-80 xl:w-96 h-10 flex items-center bg-amber-300 rounded-full overflow-hidden relative"
           >
             <input
-              className="input w-full pl-4 pr-22 rounded-full  xl:text-lg"
+              className="input w-full pl-4 pr-22 rounded-full xl:text-lg"
               type="text"
               placeholder="Search in Contesto"
+              readOnly
             />
             <input
               className="btn btn-primary rounded-full absolute right-0 z-10"
@@ -81,8 +85,9 @@ const Home = () => {
           </form>
         </div>
       </div>
-      <PopularContests/>
-         
+      <PopularContests />
+      <WinnerAdvertisement/>
+      <FullSearchModal open={openSearch} onClose={() => setOpenSearch(false)} />
     </div>
   );
 };

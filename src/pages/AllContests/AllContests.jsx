@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import ContestCard from "../../Components/ContestCard";
 import Loading from "../../Components/Loading";
-import { useLocation } from "react-router";
+import { useLocation, useSearchParams } from "react-router";
 
 const categories = [
   "All",
@@ -21,9 +21,11 @@ const AllContests = () => {
   const axiosInstance = useAxios();
   const [activeCategory, setActiveCategory] = useState("All");
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category") || "All";
 
   const { data: contests = [], isLoading } = useQuery({
-    queryKey: ["all-contests", activeCategory],
+    queryKey: ["all-contests", activeCategory, category],
     queryFn: async () => {
       const res = await axiosInstance.get("/contests", {
         params: { category: activeCategory },
@@ -47,8 +49,7 @@ const AllContests = () => {
       </h2>
 
       {/* 🔹 DaisyUI Tabs with Animation */}
-      <div data-aos="fade-up"
-        data-aos-delay={100} className="mb-8 mx-4">
+      <div data-aos="fade-up" data-aos-delay={100} className="mb-8 mx-4">
         <div className="overflow-x-auto ">
           <div className="tabs tabs-boxed bg-base-200 p-1 flex w-max mx-auto">
             {categories.map((cat) => (
