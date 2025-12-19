@@ -1,25 +1,38 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbCrown, TbCrownOff } from "react-icons/tb";
 import Swal from "sweetalert2";
 import Loading from "../Components/Loading";
 
 const UsersManagement = () => {
-  
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10;
+
   const {
-    data: users = [],
+    data = {},
     refetch,
     isLoading,
   } = useQuery({
-    queryKey: ["users", searchText],
+    queryKey: ["users", searchText, currentPage],
+    keepPreviousData: true,
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users?searchText=${searchText}`);
+      const res = await axiosSecure.get(
+        `/users?searchText=${searchText}&page=${currentPage}&limit=10`
+      );
       return res.data;
     },
   });
+
+  const users = data.users || [];
+  const totalCount = data.totalCount || 0;
+  const totalPages = Math.ceil(totalCount / limit);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchText]);
 
   const makeAdminHandler = (user, userRole) => {
     const roleInfo = { role: userRole };
@@ -63,13 +76,11 @@ const UsersManagement = () => {
     });
   };
 
-
-
   return (
     <div>
       <div className="flex items-center justify-between p-4">
         <h3 className="text-2xl font-semibold">
-          Users Management : {users.length}
+          Users Management : {totalCount}
         </h3>
         {/* search user */}
         <label className="input">
@@ -103,7 +114,7 @@ const UsersManagement = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="overflow-x-auto table-zebra bg-base-100">
+        <div className="overflow-x-auto table-zebra bg-base-100 pb-4">
           <table className="table">
             {/* head */}
             <thead>
@@ -161,6 +172,37 @@ const UsersManagement = () => {
               ))}
             </tbody>
           </table>
+          <div className="flex justify-center mt-6">
+            <div className="join">
+              <button
+                className="join-item btn"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(currentPage - 1)}
+              >
+                «
+              </button>
+
+              {[...Array(totalPages).keys()].map((page) => (
+                <button
+                  key={page}
+                  className={`join-item btn ${
+                    currentPage === page + 1 ? "btn-active" : ""
+                  }`}
+                  onClick={() => setCurrentPage(page + 1)}
+                >
+                  {page + 1}
+                </button>
+              ))}
+
+              <button
+                className="join-item btn"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                »
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

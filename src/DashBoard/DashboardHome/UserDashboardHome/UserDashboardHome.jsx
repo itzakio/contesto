@@ -21,7 +21,6 @@ const UserDashboardHome = () => {
   });
 
   const { summary = {}, categoryStats = [] } = data;
-  console.log(data);
 
   if (isLoading) return <Loading />;
 

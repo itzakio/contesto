@@ -27,6 +27,8 @@ import AboutUs from "../pages/AboutUs/AboutUs";
 import HowItWorks from "../pages/HowItWorks/HowItWorks";
 import DashboardHome from "../DashBoard/DashboardHome/DashboardHome";
 import UpdateProfile from "../DashBoard/DashboardHome/UpdateProfile";
+import MyWiningContests from "../DashBoard/UserDashboard/MyWiningContests";
+import Leaderboard from "../pages/Leaderboard/Leaderboard";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "all-contests",
         element: <AllContests />,
+      },
+      {
+        path: "leaderboard",
+        element: <Leaderboard />,
       },
       {
         path: "be-a-creator",
@@ -75,12 +81,12 @@ const router = createBrowserRouter([
       },
       {
         path: "about-us",
-        element: <AboutUs/>
+        element: <AboutUs />,
       },
       {
         path: "how-it-works",
-        element: <HowItWorks/>
-      }
+        element: <HowItWorks />,
+      },
     ],
   },
   {
@@ -99,15 +105,26 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+        <DashboardLayout />
+    ),
     children: [
+      
       {
         index: true,
-        element: <DashboardHome/>
+        element: (
+          <PrivateRoute>
+            <DashboardHome />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/edit-profile",
-        element: <UpdateProfile/>
+        element: (
+          <PrivateRoute>
+            <UpdateProfile />
+          </PrivateRoute>
+        ),
       },
       // admin only route
       {
@@ -165,6 +182,14 @@ const router = createBrowserRouter([
         element: (
           <UserRoute>
             <UserJoinedContests />
+          </UserRoute>
+        ),
+      },
+      {
+        path: "my-wined-contests",
+        element: (
+          <UserRoute>
+            <MyWiningContests />
           </UserRoute>
         ),
       },

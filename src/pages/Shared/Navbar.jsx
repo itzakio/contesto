@@ -58,6 +58,9 @@ const Navbar = () => {
           </NavLink>
         </>
       )}
+      <NavLink className="nav-links" to="/leaderboard">
+        Leaderboard 
+      </NavLink>
       <NavLink className="nav-links" to="/how-it-works">
         How It Works
       </NavLink>
@@ -272,7 +275,7 @@ const Navbar = () => {
             </p>
           </div>
           {user ? (
-            <Link className="btn font-medium bg-primary text-black">
+            <Link to='/dashboard' className="btn font-medium bg-primary text-black">
               View Profile
             </Link>
           ) : (

@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Loading from "../../Components/Loading";
+import useAuth from "../../hooks/useAuth";
 
 const UserJoinedContests = () => {
   const [searchText, setSearchText] = useState("");
+  const {user} = useAuth();
   const axiosSecure = useAxiosSecure();
   const location = useLocation();
   const { data: contests = [], isLoading } = useQuery({
-    queryKey: ["my-joined-contests"],
+    queryKey: ["my-joined-contests", user.email],
     queryFn: async () => {
       const res = await axiosSecure.get("/my-joined-contests");
       return res.data;

@@ -2,6 +2,7 @@ import React from "react";
 import logo from "/logo.png";
 import { Link, NavLink, Outlet } from "react-router";
 import { RiArrowLeftSLine, RiUserSettingsLine } from "react-icons/ri";
+import { GiTrophyCup } from "react-icons/gi";
 import { HiOutlineSquaresPlus } from "react-icons/hi2";
 import useAuth from "../hooks/useAuth";
 import Loading from "../Components/Loading";
@@ -209,6 +210,20 @@ const DashboardLayout = () => {
                     <LuClipboardList size={20} />
                     <span className="is-drawer-close:hidden">
                       My Joined Contests
+                    </span>
+                  </NavLink>
+                </li>
+                {/* List item */}
+                <li>
+                  <NavLink
+                    to="/dashboard/my-wined-contests"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="  My Wined Contests"
+                  >
+                    {/*Creators_Application */}
+                    <GiTrophyCup  size={20} />
+                    <span className="is-drawer-close:hidden">
+                      My Wined Contests
                     </span>
                   </NavLink>
                 </li>
