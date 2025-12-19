@@ -40,6 +40,9 @@ const AllContests = () => {
 
   return (
     <div className="max-w-[1440px] mx-auto my-12">
+      <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-secondary/20 rounded-full blur-3xl"></div>
+
       <h2
         data-aos="fade-up"
         data-aos-delay={0}

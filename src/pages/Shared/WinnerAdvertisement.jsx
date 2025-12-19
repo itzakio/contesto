@@ -16,7 +16,7 @@ const WinnerAdvertisement = () => {
 
   if (isLoading) return <Loading />;
   return (
-    <section className=" py-16 my-20">
+    <section className="bg-base-200 py-16 my-20">
       <div className="max-w-[1440px] mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12" data-aos="fade-up">

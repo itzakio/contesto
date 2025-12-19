@@ -1,16 +1,55 @@
-# React + Vite
+> ## **Contesto** 
+> **Challenge the Limits of Creativity.**
+- Logo : <br>
+<img src="./public/logo.png" alt="The Book Haven" style="width:150px;" />
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Description:
+**Welcome to Contesto – More Than Just Contests!**  
+Contesto is a modern online contest platform where creativity meets opportunity.  
+Users can participate in various skill-based contests, showcase their talent, and win exciting prizes, while creators can host fair and engaging competitions.
 
-Currently, two official plugins are available:
+Whether you're a designer, developer, photographer, or video editor — Contesto gives you the stage to compete, grow, and get rewarded.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+### ✨ Key Features:
+- 🏆 Participate in multiple contest categories such as Design, Programming, Photography, and Video Editing
+- 👑 Role-based access system with Admin, Creator, and Participant roles
+- 📝 Easy contest creation, editing, and management for creators
+- 💰 Secure entry fee handling and prize distribution system
+- 📊 Transparent judging process with clear winner status tracking
+- 👥 Real-time participant and submission management
+- 🔐 Secure authentication with protected routes and authorization
+- 🏅 Winner showcase and success highlights to motivate users
+- 📱 Fully responsive, modern, and user-friendly interface
+- 🚀 Scalable and performance-optimized full-stack architecture
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🛠️ Technologies:
+**Frontend**
+- React (Vite)
+- Tailwind CSS
+- DaisyUI
+- React Router
+- TanStack Query
+- AOS Animation
+
+**Backend**
+- Node.js
+- Express.js
+- MongoDB
+
+**Authentication & Payments**
+- Firebase Authentication
+- Stripe Payment Gateway
+
+**Tools & Others**
+- Axios
+- SweetAlert2
+- JWT
+
+
+
+Live Link: https://contesto-byakio.web.app

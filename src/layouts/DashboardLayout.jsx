@@ -98,7 +98,7 @@ const DashboardLayout = () => {
                     {/* User_Management */}
                     <Home size={20} />
                     <span className="is-drawer-close:hidden">
-                      Create Contest
+                      Dashboard Home
                     </span>
                   </NavLink>
                 </li>

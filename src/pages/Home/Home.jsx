@@ -6,6 +6,7 @@ import PopularContests from "../Shared/PopularContests";
 import FullSearchModal from "../../Components/FullSearchModal";
 import WinnerAdvertisement from "../Shared/WinnerAdvertisement";
 import ErrorPage from "../../Components/ErrorPage";
+import WhyJoinUs from "../Shared/WhyJoinUs";
 
 const Home = () => {
   const [openSearch, setOpenSearch] = useState(false);
@@ -87,6 +88,7 @@ const Home = () => {
           </form>
         </div>
       </div>
+      <WhyJoinUs/>
       <PopularContests />
       <WinnerAdvertisement/>
       <FullSearchModal open={openSearch} onClose={() => setOpenSearch(false)} />

@@ -19,7 +19,7 @@ const location = useLocation();
   if (isLoading) return <Loading />;
 
   return (
-    <section className="max-w-[1440px] mx-auto my-16">
+    <section className="max-w-[1440px] mx-auto my-16 relative">
       <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-primary text-center mb-8">
         Popular Contests
       </h2>
@@ -40,7 +40,7 @@ const location = useLocation();
           ))}
         </div>
       )}
-      <div className=" mt-8 flex justify-center">
+      <div className=" mt-8 lg:mt-16 flex justify-center">
         <Link  className="btn btn-primary text-black" to='/all-contests'>Show All</Link>
       </div>
     </section>
