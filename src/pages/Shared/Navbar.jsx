@@ -14,6 +14,8 @@ const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const role = useRole();
 
+  console.log(role.role);
+
   useEffect(() => {
     const html = document.querySelector("html");
     html.setAttribute("data-theme", theme);
@@ -46,21 +48,23 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/all-contests">
         All Contests
       </NavLink>
-      {role?.role.role === "user" && (
+      <NavLink className="nav-links" to="/leaderboard">
+        Leaderboard
+      </NavLink>
+      {role?.role === "user" && (
         <NavLink className="nav-links" to="/be-a-creator">
           Be A Creator
         </NavLink>
       )}
-      {role === "creator" && (
+
+      {role?.role === "creator" && (
         <>
           <NavLink className="nav-links" to="/create-contest">
             Create Contest
           </NavLink>
         </>
       )}
-      <NavLink className="nav-links" to="/leaderboard">
-        Leaderboard 
-      </NavLink>
+
       <NavLink className="nav-links" to="/how-it-works">
         How It Works
       </NavLink>
@@ -200,7 +204,7 @@ const Navbar = () => {
       >
         <div className="flex justify-between items-center w-full mb-4">
           <div
-            className="bg-primary p-2 rounded-full text-white cursor-pointer"
+            className="bg-primary p-2 rounded-full text-black cursor-pointer"
             onClick={() => setShow(!show)}
           >
             <RxCrossCircled size={24} />
@@ -275,7 +279,10 @@ const Navbar = () => {
             </p>
           </div>
           {user ? (
-            <Link to='/dashboard' className="btn font-medium bg-primary text-black">
+            <Link
+              to="/dashboard"
+              className="btn font-medium bg-primary text-black"
+            >
               View Profile
             </Link>
           ) : (

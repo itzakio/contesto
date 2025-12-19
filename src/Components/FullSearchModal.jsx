@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { RxCross2 } from "react-icons/rx";
+import {  RxCrossCircled } from "react-icons/rx";
 import useAxios from "../hooks/useAxios";
 import Loading from "./Loading";
 import ContestCard from "./ContestCard";
@@ -41,10 +41,11 @@ const FullSearchModal = ({ open, onClose }) => {
 
           <button
             onClick={onClose}
-            className="btn btn-square btn-ghost text-xl"
+            className="btn btn-square btn-ghost text-xl bg-primary rounded-full text-black"
           >
-            <RxCross2 />
+            <RxCrossCircled size={24} />
           </button>
+          
         </div>
       </div>
 

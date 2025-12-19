@@ -98,7 +98,7 @@ const WinnerAdvertisement = () => {
           <p className="mb-6 opacity-90">
             Participate today and turn your talent into rewards.
           </p>
-          <a href="/all-contests" className="btn btn-accent text-black">
+          <a href="/all-contests" className="btn btn-primary text-black">
             Explore Contests
           </a>
         </div>

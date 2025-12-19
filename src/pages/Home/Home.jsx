@@ -5,6 +5,7 @@ import logo from "/logo.png";
 import PopularContests from "../Shared/PopularContests";
 import FullSearchModal from "../../Components/FullSearchModal";
 import WinnerAdvertisement from "../Shared/WinnerAdvertisement";
+import ErrorPage from "../../Components/ErrorPage";
 
 const Home = () => {
   const [openSearch, setOpenSearch] = useState(false);
@@ -64,6 +65,7 @@ const Home = () => {
           </span>
         </p>
         <div
+        data-aos="fade-up" data-aos-delay="750"
           className="mt-8 cursor-pointer"
           onClick={() => setOpenSearch(true)}
         >

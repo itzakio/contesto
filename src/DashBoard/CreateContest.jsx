@@ -67,7 +67,7 @@ export default function CreateContest() {
           axiosSecure.post("/contests", contestData).then((res) => {
             if (res.data.insertedId) {
               Swal.fire({
-                title: `Post submitted for admin approval!`,
+                title: `Contest submitted for admin approval!`,
 
                 icon: "success",
                 timer: 2500,

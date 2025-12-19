@@ -29,11 +29,13 @@ import DashboardHome from "../DashBoard/DashboardHome/DashboardHome";
 import UpdateProfile from "../DashBoard/DashboardHome/UpdateProfile";
 import MyWiningContests from "../DashBoard/UserDashboard/MyWiningContests";
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
+import ErrorPage from "../Components/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage/>,
     children: [
       {
         index: true,
@@ -203,6 +205,10 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "*",
+    element: <ErrorPage/>
+  }
 ]);
 
 export default router;

@@ -6,7 +6,7 @@ import { TbBrandYoutubeFilled } from "react-icons/tb";
 
 const Footer = () => {
   return (
-    <div data-aos="fade-up" data-aos-delay="0" className=" p-10 max-w-[1440px] mx-auto margin-top">
+    <div data-aos="fade-up" data-aos-delay="0" className=" p-10 max-w-[1440px] mx-auto ">
       <div className="footer sm:footer-horizontal border-t border-accent pt-8">
         <div data-aos="fade-up" data-aos-delay="100">
         <img className="size-28" src={logo} alt="" />

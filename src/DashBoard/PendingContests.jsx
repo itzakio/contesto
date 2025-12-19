@@ -42,6 +42,28 @@ const PendingContests = () => {
     });
   };
 
+  const contestDeleteHandler = (id) => {
+    Swal.fire({
+      title: `Are you sure you want to delete this contest?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/contests/${id}`).then((res) => {
+          if (res.data.deletedCount) {
+            Swal.fire({
+              title: `Contest deleted successfully!`,
+              icon: "success",
+              timer: 2500,
+            });
+            refetch();
+          }
+        });
+      }
+    });
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between p-4">
@@ -143,20 +165,34 @@ const PendingContests = () => {
                         </button>
                       )}
                       {contest?.status === "pending" && (
-                        <button
-                          onClick={() =>
-                            contestStatusUpdateHandler(contest?._id, "rejected")
-                          }
-                          className="btn btn-error"
-                        >
-                          Reject
-                        </button>
+                        <>
+                          <button
+                            onClick={() =>
+                              contestStatusUpdateHandler(
+                                contest?._id,
+                                "rejected"
+                              )
+                            }
+                            className="btn btn-outline hover:btn-error"
+                          >
+                            Reject
+                          </button>
+                          <button
+                            onClick={() => contestDeleteHandler(contest?._id)}
+                            disabled={contest?.status === "approved"}
+                            className="btn btn-error "
+                          >
+                            Delete
+                          </button>
+                        </>
                       )}
                     </div>
                   </td>
                   <td>
                     <div className="flex justify-center gap-4">
-                      <Link state={location.pathname} className="btn">details</Link>
+                      <Link state={location.pathname} className="btn">
+                        details
+                      </Link>
                     </div>
                   </td>
                 </tr>
