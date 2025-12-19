@@ -7,13 +7,28 @@ import { Toaster } from "react-hot-toast";
 const AuthLayout = () => {
   return (
     <div className=" min-h-screen bg-base-100">
-      <section className="flex">
-        <div className="flex-1 flex justify-center items-center relative min-h-screen bg-base-100">
-          <div className="absolute left-10 top-10">
+      <section className="flex flex-col-reverse md:flex-row">
+        <div className="flex-1 hidden md:flex justify-center items-center min-h-screen">
+           <div className="absolute left-10 top-10">
             <Link to="/">
               <div className="flex items-center">
                 <img className="size-12" src={logo} alt="" />
-                <div className="hidden md:block">
+                <div >
+                  <h3 className="text-3xl font-extrabold text-primary">
+                    Contesto
+                  </h3>
+                </div>
+              </div>
+            </Link>
+          </div>
+          <img className="w-full" src={logo} alt="authImage" />
+        </div>
+        <div className="flex-1 flex justify-center items-center relative min-h-screen bg-base-100">
+          <div className="absolute left-4 md:left-10 top-10 md:hidden">
+            <Link to="/">
+              <div className="flex items-center">
+                <img className="size-12" src={logo} alt="" />
+                <div >
                   <h3 className="text-3xl font-extrabold text-primary">
                     Contesto
                   </h3>
@@ -22,9 +37,6 @@ const AuthLayout = () => {
             </Link>
           </div>
           <Outlet />
-        </div>
-        <div className="flex-1 flex justify-center items-center min-h-screen bg-primary/5">
-          <img src={contestoImg} alt="authImage" />
         </div>
       </section>
       <Toaster position="top-center" reverseOrder={false} />

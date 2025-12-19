@@ -123,7 +123,7 @@ const axiosSecure = useAxiosSecure();
       });
   };
   return (
-    <div className=" card w-full margin-y -mb-10 max-w-sm shrink-0 mx-auto">
+    <div className="top-14 md:top-0 card w-full margin-y -mb-10 max-w-sm shrink-0 mx-auto">
       <div className="card-body">
         <form
          onSubmit={handleSubmit(registerHandler)}
