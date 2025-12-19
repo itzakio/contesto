@@ -11,8 +11,6 @@ const PaymentSuccess = () => {
     const axiosSecure = useAxiosSecure();
     const [paymentInfo, setPaymentInfo] = useState({})
     const sessionId = searchParams.get("session_id")
-    const location = useLocation();
-    console.log(location)
 
     useEffect(()=>{
         if(sessionId){
@@ -31,7 +29,7 @@ const PaymentSuccess = () => {
             <img className='w-40' src={payment} alt="payment" />
             <h2 className='text-4xl font-extrabold text-center'>Payment Successful!</h2> 
             <p><strong>Your Transaction Id:</strong> {paymentInfo?.transactionId}</p>
-            <Link className='btn btn-primary text-black' to="/dashboard/my-parcels"><MdArrowBack />My Parcels</Link>
+            <Link className='btn btn-primary text-black' to="/dashboard/my-joined-contests"><MdArrowBack />My Joined Contests</Link>
         </div>
     );
 };

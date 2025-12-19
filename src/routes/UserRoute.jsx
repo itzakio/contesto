@@ -11,7 +11,7 @@ const UserRoute = ({children}) => {
     if(userLoading || isRoleLoading){
         return <Loading/>
     }
-    if(role?.role !== "user"){
+    if(role !== "user"){
         return <Forbidden/>
     }
     return children;

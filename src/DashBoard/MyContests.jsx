@@ -148,7 +148,7 @@ const MyContests = () => {
                           state={location.pathname}
                           to={`/edit-contest/${contest?._id}`}
                           disabled={contest?.status === "approved"}
-                          className="btn btn-primary disabled:cursor-not-allowed text-black"
+                          className="btn btn-primary disabled:cursor-not-allowed "
                         >
                           Edit
                         </Link>
@@ -158,32 +158,34 @@ const MyContests = () => {
                   <td>
                     <div className="flex justify-center gap-4">
                       <Link
+                      state={location.pathname}
                         to={`/contests-details/${contest._id}`}
-                        className="btn text-black"
+                        className="btn"
                       >
                         View Details
                       </Link>
                       <div
                         className={
                           contest?.status === "approved"
-                            ? "cursor-not-allowed inline-block"
-                            : "inline-block"
+                            ? "cursor-not-allowed inline-block "
+                            : "inline-block "
                         }
                       >
                         <button
                           onClick={() => contestDeleteHandler(contest?._id)}
                           disabled={contest?.status === "approved"}
-                          className="btn btn-error text-black "
+                          className="btn btn-error "
                         >
                           Delete
                         </button>
-                        <Link
+                       
+                      </div> 
+                      <Link
                           to={`/dashboard/contest/${contest._id}/submissions`}
-                          className="btn btn-outline"
+                          className="btn btn-secondary text-black"
                         >
                           See Submissions
                         </Link>
-                      </div>
                     </div>
                   </td>
                 </tr>

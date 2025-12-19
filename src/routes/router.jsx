@@ -25,6 +25,7 @@ import UserJoinedContests from "../DashBoard/UserDashboard/UserJoinedContests";
 import ContestSubmissions from "../DashBoard/CreatorDashboard/ContestSubmissions";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import HowItWorks from "../pages/HowItWorks/HowItWorks";
+import DashboardHome from "../DashBoard/DashboardHome/DashboardHome";
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardLayout />,
     children: [
+      {
+        index: true,
+        element: <DashboardHome/>
+      },
       // admin only route
       {
         path: "users-management",

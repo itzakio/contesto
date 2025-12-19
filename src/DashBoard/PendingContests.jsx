@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Loading from "../Components/Loading";
 import Swal from "sweetalert2";
+import { Link, useLocation } from "react-router";
 
 const PendingContests = () => {
   const [searchText, setSearchText] = useState("");
   const axiosSecure = useAxiosSecure();
+  const location = useLocation();
   const {
     data: contests,
     isLoading,
@@ -154,7 +156,7 @@ const PendingContests = () => {
                   </td>
                   <td>
                     <div className="flex justify-center gap-4">
-                      <button className="btn">details</button>
+                      <Link state={location.pathname} className="btn">details</Link>
                     </div>
                   </td>
                 </tr>

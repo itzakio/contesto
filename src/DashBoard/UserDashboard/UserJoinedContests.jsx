@@ -130,6 +130,7 @@ const UserJoinedContests = () => {
                   <td className="text-center">
                     <div className="flex justify-center gap-3">
                       <Link
+                      state={location.pathname}
                         to={`/contests-details/${item.contest._id}`}
                         className="btn text-black"
                       >

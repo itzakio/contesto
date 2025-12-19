@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Loading from "../Components/Loading";
 import Swal from "sweetalert2";
+import { Link, useLocation } from "react-router";
 
 const ApprovedContests = () => {
   const [searchText, setSearchText] = useState("");
   const axiosSecure = useAxiosSecure();
+  const location = useLocation();
   const { data: contests, isLoading, refetch } = useQuery({
     queryKey: ["approved-contests"],
     queryFn: async () => {
@@ -126,7 +128,13 @@ const ApprovedContests = () => {
                  
                   <td>
                     <div className="flex justify-center gap-4">
-                      <button className="btn">details</button>
+                      <Link
+                      state={location.pathname}
+                        to={`/contests-details/${contest._id}`}
+                        className="btn"
+                      >
+                        View Details
+                      </Link>
                      
                     </div>
                   </td>

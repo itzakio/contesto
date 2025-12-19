@@ -12,7 +12,7 @@ const CreatorRoute = ({children}) => {
     if(userLoading || isRoleLoading){
         return <Loading/>
     }
-    if(role?.role !== "creator"){
+    if(role !== "creator"){
         return <Forbidden/>
     }
     return children;

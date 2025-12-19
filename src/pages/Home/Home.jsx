@@ -82,8 +82,7 @@ const Home = () => {
         </div>
       </div>
       <PopularContests/>
-          <Forbidden/>
-        <Loading/>
+         
     </div>
   );
 };

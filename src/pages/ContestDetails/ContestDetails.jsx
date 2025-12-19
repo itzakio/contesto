@@ -7,13 +7,16 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import SubmissionForm from "./SubmissionForm";
 import { FaArrowLeft } from "react-icons/fa";
+import useRole from "../../hooks/useRole";
 
 const ContestDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
+  const { user, userLoading } = useAuth();
   const location = useLocation();
+  const role = useRole();
 
+  console.log(role)
   const {
     data: contest = {},
     isLoading,
@@ -83,14 +86,14 @@ const participantCount = Pcount?.count || 0;
         window.location.assign(res.data.url);
       }
     } catch (error) {
-      Swal.fire("Error", "Payment failed!", "error");
+      Swal.fire("Error","Payment failed!", "error");
     }
   };
 
 
 
 
-  if (isLoading || paymentLoading) {
+  if (isLoading || paymentLoading || userLoading) {
     return <Loading />;
   }
 
@@ -130,7 +133,7 @@ const participantCount = Pcount?.count || 0;
               {new Date(participationEndAt).toLocaleString()}
             </p>
             <p>
-              😊 <strong>Participants:</strong> {participantCount}
+              👱 <strong>Participants:</strong> {participantCount}
             </p>
           </div>
 
@@ -138,7 +141,7 @@ const participantCount = Pcount?.count || 0;
           <CountdownTimer endTime={participationEndAt} />
 
           {/* PAY BUTTON */}
-          {!hasPaid && !deadlinePassed && (
+          {!hasPaid && !deadlinePassed && role?.role === "user" &&  (
             <button
               onClick={paymentHandler}
               className="btn btn-primary mt-6 w-full"

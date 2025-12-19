@@ -51,7 +51,7 @@ const Navbar = () => {
           Be A Creator
         </NavLink>
       )}
-      {role?.role.role === "creator" && (
+      {role === "creator" && (
         <>
           <NavLink className="nav-links" to="/create-contest">
             Create Contest
@@ -268,7 +268,7 @@ const Navbar = () => {
           <div className="text-xl font-semibold">
             {user ? <p>{user?.displayName}</p> : <p>User</p>}
             <p className=" text-xs bg-green-300 text-green-700 p-1 text-center">
-              {role?.role.role}
+              {role.role}
             </p>
           </div>
           {user ? (
