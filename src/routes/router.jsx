@@ -26,6 +26,7 @@ import ContestSubmissions from "../DashBoard/CreatorDashboard/ContestSubmissions
 import AboutUs from "../pages/AboutUs/AboutUs";
 import HowItWorks from "../pages/HowItWorks/HowItWorks";
 import DashboardHome from "../DashBoard/DashboardHome/DashboardHome";
+import UpdateProfile from "../DashBoard/DashboardHome/UpdateProfile";
 
 const router = createBrowserRouter([
   {
@@ -103,6 +104,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardHome/>
+      },
+      {
+        path: "/dashboard/edit-profile",
+        element: <UpdateProfile/>
       },
       // admin only route
       {
