@@ -109,7 +109,7 @@ const DashboardLayout = () => {
                 {/* List item */}
                 <li>
                   <NavLink
-                    to="/create-contest"
+                    to="/dashboard/create-contest"
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                     data-tip="Create Contest"
                   >

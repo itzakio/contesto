@@ -40,17 +40,12 @@ const AllContests = () => {
 
   return (
     <div className="max-w-[1440px] mx-auto my-12">
-      
-      <h2
-        data-aos="fade-up"
-        data-aos-delay={0}
-        className="text-xl md:text-2xl lg:text-3xl font-bold text-primary text-center mb-6"
-      >
+      <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-primary text-center mb-6">
         {activeCategory} Contests
       </h2>
 
       {/* 🔹 DaisyUI Tabs with Animation */}
-      <div data-aos="fade-up" data-aos-delay={100} className="mb-8 mx-4">
+      <div className="mb-8 mx-4">
         <div className="overflow-x-auto ">
           <div className="tabs tabs-boxed bg-base-200 p-1 flex w-max mx-auto">
             {categories.map((cat) => (
@@ -84,12 +79,14 @@ const AllContests = () => {
         /* 🔹 Contest Cards (NO animation) */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-4">
           {contests.map((contest, index) => (
-            <ContestCard
-              state={location.pathname}
-              key={contest._id}
-              contest={contest}
-              index={index}
-            />
+            <div>
+              <ContestCard
+                state={location.pathname}
+                key={contest._id}
+                contest={contest}
+                index={index}
+              />
+            </div>
           ))}
         </div>
       )}

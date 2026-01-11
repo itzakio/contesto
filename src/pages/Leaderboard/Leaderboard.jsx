@@ -18,8 +18,6 @@ const Leaderboard = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 min-h-screen">
       <h2
-        data-aos="fade-up"
-        data-aos-delay={0}
         className="text-3xl text-primary font-bold text-center mb-6"
       >
         🏆 Leaderboard
@@ -27,7 +25,7 @@ const Leaderboard = () => {
 
       <div className="overflow-auto min-h-screen  bg-base-100 shadow rounded-xl">
         <table className="table table-zebra w-full">
-          <thead data-aos="fade-up" data-aos-delay={100}>
+          <thead >
             <tr>
               <th>Rank</th>
               <th>User</th>
@@ -38,8 +36,6 @@ const Leaderboard = () => {
           <tbody>
             {leaders.map((user, index) => (
               <tr
-                data-aos="fade-up"
-                data-aos-delay={index * 100 + 100}
                 key={index}
               >
                 <td className="font-bold">#{index + 1}</td>

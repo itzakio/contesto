@@ -2,6 +2,7 @@ import { FaTrophy, FaMoneyBillWave, FaUsers } from "react-icons/fa";
 import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../Components/Loading";
+import { GiTrophy } from "react-icons/gi";
 
 const WinnerAdvertisement = () => {
   const axiosInstance = useAxios();
@@ -15,90 +16,113 @@ const WinnerAdvertisement = () => {
   });
 
   if (isLoading) return <Loading />;
+
   return (
-    <section className="bg-base-200 py-16 my-20">
-      <div className="max-w-[1440px] mx-auto px-6">
+    <section className="relative py-20 bg-base-100 overflow-hidden">
+      {/* Decorative gradient */}
+      <div className=" pointer-events-none" />
+
+      <div className="relative max-w-[1440px] mx-auto px-6">
         {/* Header */}
-        <div className="text-center mb-12" data-aos="fade-up">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-primary">
-            Our Winners Are Proof of Success
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-primary">
+            Winners That Inspire
           </h2>
-          <p className="mt-4 text-lg opacity-90">
-            Join Contesto, showcase your skills, and become our next champion.
+          <p className="mt-4 text-lg text-base-content/70">
+            Real people. Real skills. Real rewards.  
+            Contesto turns talent into success stories.
           </p>
         </div>
 
         {/* Stats */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
-          data-aos="fade-up"
-          data-aos-delay="200"
-        >
-          <div className="stat bg-base-100 text-black rounded-xl shadow">
-            <div className="stat-figure text-primary text-3xl">
-              <FaTrophy />
-            </div>
-            <div className="stat-title">Total Winners</div>
-            <div className="stat-value">1,250+</div>
-            <div className="stat-desc">Across all contests</div>
-          </div>
-
-          <div className="stat bg-base-100 text-black rounded-xl shadow">
-            <div className="stat-figure text-success text-3xl">
-              <FaMoneyBillWave />
-            </div>
-            <div className="stat-title">Prize Money Paid</div>
-            <div className="stat-value">$85,000+</div>
-            <div className="stat-desc">And counting</div>
-          </div>
-
-          <div className="stat bg-base-100 text-black rounded-xl shadow">
-            <div className="stat-figure text-warning text-3xl">
-              <FaUsers />
-            </div>
-            <div className="stat-title">Active Participants</div>
-            <div className="stat-value">12,000+</div>
-            <div className="stat-desc">Creative minds</div>
-          </div>
-        </div>
-
-        {/* Recent Winners */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          data-aos="fade-up"
-          data-aos-delay="400"
-        >
-          {winners?.map((winner, index) => (
-            <div key={index} className="card bg-base-100 text-black shadow-xl">
-              <div className="card-body items-center text-center">
-                <div className="avatar mb-4">
-                  <div className="w-20 rounded-full ring ring-primary ring-offset-2">
-                    <img src={winner.photoURL} alt={winner.name} />
-                  </div>
-                </div>
-                <h3 className="font-bold text-lg">{winner.name}</h3>
-                <p className="text-sm opacity-70">{winner.category}</p>
-                <p className="font-semibold text-success mt-2">
-                  Won {winner.prize}
-                </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+          {[
+            {
+              icon: <FaTrophy />,
+              title: "Total Winners",
+              value: "1,250+",
+              desc: "Across all contests",
+              color: "text-primary",
+            },
+            {
+              icon: <FaMoneyBillWave />,
+              title: "Prize Money Paid",
+              value: "$85,000+",
+              desc: "And counting",
+              color: "text-success",
+            },
+            {
+              icon: <FaUsers />,
+              title: "Active Participants",
+              value: "12,000+",
+              desc: "Creative minds",
+              color: "text-warning",
+            },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              className="bg-base-100/80 backdrop-blur rounded-lg p-8 shadow hover:shadow-lg transition"
+            >
+              <div className={`text-4xl mb-4 ${stat.color}`}>
+                {stat.icon}
               </div>
+              <h4 className="text-sm uppercase tracking-wide opacity-70">
+                {stat.title}
+              </h4>
+              <p className="text-3xl font-bold mt-2">{stat.value}</p>
+              <p className="text-sm opacity-60 mt-1">{stat.desc}</p>
             </div>
           ))}
         </div>
 
-        {/* CTA */}
-        <div
-          className="text-center mt-16"
-          data-aos="fade-up"
-          data-aos-delay="600"
-        >
-          <h3 className="text-2xl font-bold mb-4">
-            You Could Be Our Next Winner 🚀
+        {/* Recent Winners */}
+        <div className="mb-20">
+          <h3 className="text-2xl font-bold text-center mb-10 flex gap-2 justify-center">
+            Recent Champions <span className="text-yellow-500"><GiTrophy /></span>
           </h3>
-          <p className="mb-6 opacity-90">
-            Participate today and turn your talent into rewards.
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {winners.map((winner, index) => (
+              <div
+                key={index}
+                className="group bg-base-100/80 backdrop-blur rounded-lg p-8 shadow hover:shadow-xl transition"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="avatar mb-4">
+                    <div className="w-20 rounded-full ring ring-primary/50 ring-offset-2 ring-offset-base-100">
+                      <img src={winner.photoURL} alt={winner.name} />
+                    </div>
+                  </div>
+
+                  <h4 className="font-semibold text-lg">
+                    {winner.name}
+                  </h4>
+                  <p className="text-sm opacity-60">
+                    {winner.category}
+                  </p>
+
+                  <span className="mt-4 inline-block px-4 py-1 rounded-full text-sm font-semibold bg-success/10 text-success">
+                    Won {winner.prize}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="text-center max-w-2xl mx-auto">
+          <h3 className="text-3xl font-bold mb-4">
+            Your Name Could Be Here 🚀
+          </h3>
+          <p className="text-base-content/70 mb-8">
+            Participate in contests, showcase your skills, and join the winners
+            community.
           </p>
-          <a href="/all-contests" className="btn btn-primary text-black">
+          <a
+            href="/all-contests"
+            className="btn btn-primary text-black px-8"
+          >
             Explore Contests
           </a>
         </div>

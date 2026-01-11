@@ -41,6 +41,10 @@ html {
   --color-neutral: #7f7f7f;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .nav-links {
   @apply flex items-center justify-center gap-0 font-medium hover:to-base-300;
 }
@@ -63,7 +67,7 @@ nav a.active {
 
 
 .footer-link {
-  @apply hover:translate-x-2 text-accent transition-all duration-100 cursor-pointer;
+  @apply  text-accent transition-all duration-100 cursor-pointer;
 }
 .title-footer{
   @apply text-xl mb-2 font-semibold text-primary

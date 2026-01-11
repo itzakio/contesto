@@ -14,10 +14,12 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
+
   const {
     register,
-    formState: { errors },
     handleSubmit,
+    setValue,
+    formState: { errors },
   } = useForm();
 
   const loginHandler = (data) => {
@@ -25,41 +27,28 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         setUser(user);
-        toast.success("Logged In Successfully!");
+        toast.success("Logged in successfully!");
         navigate(location.state ? location.state : "/");
       })
       .catch((error) => {
-        if (error.code === "auth/invalid-email") {
-          toast.error("Invalid email address. Please check and try again.");
-        } else if (error.code === "auth/missing-password") {
-          toast.error("Please enter your password to continue.");
-        } else if (error.code === "auth/user-not-found") {
-          toast.error(
-            "No account found with this email. Please sign up first."
-          );
-        } else if (error.code === "auth/wrong-password") {
-          toast.error("Incorrect password. Please try again.");
-        } else if (error.code === "auth/invalid-credential") {
-          toast.error(
-            "This email is not registered or the password is incorrect."
-          );
-        } else if (error.code === "auth/too-many-requests") {
-          toast.error(
-            "Too many failed attempts. Try again later or reset your password."
-          );
-        } else if (error.code === "auth/network-request-failed") {
-          toast.error("Network error. Please check your internet connection.");
-        } else if (error.code === "auth/popup-closed-by-user") {
-          toast.error("Sign-in popup was closed before completion.");
-        } else if (error.code === "auth/operation-not-allowed") {
-          toast.error(
-            "This sign-in method is currently disabled. Please contact support."
-          );
-        } else {
-          toast.error(
-            error.message || "Something went wrong. Please try again."
-          );
-        }
+        const errorMap = {
+          "auth/invalid-email":
+            "Invalid email address. Please check and try again.",
+          "auth/missing-password":
+            "Please enter your password to continue.",
+          "auth/user-not-found":
+            "No account found with this email. Please sign up first.",
+          "auth/wrong-password":
+            "Incorrect password. Please try again.",
+          "auth/invalid-credential":
+            "Email or password is incorrect.",
+          "auth/too-many-requests":
+            "Too many failed attempts. Try again later.",
+          "auth/network-request-failed":
+            "Network error. Please check your internet connection.",
+        };
+
+        toast.error(errorMap[error.code] || "Login failed. Try again.");
       });
   };
 
@@ -68,104 +57,152 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         setUser(user);
-        toast.success("Logged In Successfully!");
+        toast.success("Logged in successfully!");
 
-        // create user in database
-        const user_info = {
-          email: result.user.email,
-          name: result.user.displayName,
-          photo_url: result.user.photoURL,
+        const userInfo = {
+          email: user.email,
+          name: user.displayName,
+          photo_url: user.photoURL,
         };
-        axiosSecure.post("/users", user_info).then((res) => {
-          if (res.data.insertedId) {
-            console.log("user created in database");
-          }
-        });
+
+        axiosSecure.post("/users", userInfo);
         navigate(location.state ? location.state : "/");
       })
-      .catch((error) => {
-        toast.error(error.message || "Something went wrong. Please try again.");
-      });
+      .catch((error) =>
+        toast.error(error.message || "Google sign-in failed")
+      );
+  };
+
+  const fillDemoCredentials = (role) => {
+    const demoUsers = {
+      admin: {
+        email: "contesto@gmail.com",
+        password: "Akio@2001",
+      },
+      creator: {
+        email: "akio@gmail.com",
+        password: "Akio@2001",
+      },
+      user: {
+        email: "akash@gmail.com",
+        password: "Akio@2001",
+      },
+    };
+
+    setValue("email", demoUsers[role].email);
+    setValue("password", demoUsers[role].password);
+    setEmailValue(demoUsers[role].email);
+
+    toast.success(`${role.toUpperCase()} credentials filled`);
   };
 
   return (
-    <div className=" card w-full margin-y max-w-sm shrink-0 mx-auto">
+    <div className="card w-full max-w-sm mx-auto my-16 bg-base-200 shadow-xl">
       <div className="card-body">
         <form onSubmit={handleSubmit(loginHandler)}>
           <h3 className="text-4xl font-extrabold mb-2">Welcome Back</h3>
-          <p className="text-lg mb-4">Login with Contesto</p>
-          <fieldset className="fieldset">
-            {/* email */}
-            <label className="text-base label font-semibold">Email</label>
+          <p className="text-lg mb-4 opacity-70">Login to Contesto</p>
+
+          {/* EMAIL */}
+          <label className="label font-semibold">Email</label>
+          <input
+            {...register("email", { required: true })}
+            type="email"
+            className="input input-bordered w-full"
+            placeholder="Enter your email"
+            onChange={(e) => setEmailValue(e.target.value)}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm">Email is required</p>
+          )}
+
+          {/* PASSWORD */}
+          <label className="label font-semibold mt-3">Password</label>
+          <div className="relative">
             <input
-              {...register("email", { required: true })}
-              type="email"
-              className="input w-full text-base placeholder:text-accent"
-              placeholder="Enter Your Email"
-              onChange={(e) => setEmailValue(e.target.value)}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Minimum 6 characters",
+                },
+              })}
+              type={show ? "text" : "password"}
+              className="input input-bordered w-full"
+              placeholder="Enter your password"
             />
-            {errors.email?.type === "required" && (
-              <p className="text-red-500">Email is required</p>
-            )}
-            {/* password */}
-            <label className="label text-base font-semibold">Password</label>
-            <div className="relative">
-              <input
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
-                  pattern: {
-                    value:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
-                    message:
-                      "Password must contain at least one uppercase, one lowercase,one number & one special character",
-                  },
-                })}
-                type={show ? "text" : "password"}
-                className="input w-full placeholder:text-accent text-base transition-all duration-200"
-                placeholder="Enter Your Password"
-              />
-              <p
-                onClick={() => setShow(!show)}
-                className="absolute right-4 top-2.5 z-99"
+            <span
+              onClick={() => setShow(!show)}
+              className="absolute right-4 top-3 cursor-pointer"
+            >
+              {show ? <HiEye size={20} /> : <HiEyeOff size={20} />}
+            </span>
+          </div>
+          {errors.password && (
+            <p className="text-red-500 text-sm">
+              {errors.password.message}
+            </p>
+          )}
+
+          {/* DEMO BUTTONS */}
+          <div className="mt-4">
+            <p className="text-sm text-center opacity-70 mb-2">
+              Try Demo Accounts
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => fillDemoCredentials("admin")}
+                className="btn btn-outline btn-sm"
               >
-                {show ? <HiEye size={20} /> : <HiEyeOff size={20} />}
-              </p>
-            </div>
-            {errors?.password && (
-              <p className="text-red-500">{errors.password.message}</p>
-            )}
-            <div className="mt-2 text-base">
-              <Link state={emailValue} to="/reset-password">
-                Forgot password?
-              </Link>
-            </div>
-            <div className="flex flex-col items-center">
-              <button type="submit" className="btn bg-primary w-full">
-                Login
+                Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => fillDemoCredentials("creator")}
+                className="btn btn-outline btn-sm"
+              >
+                Creator
+              </button>
+              <button
+                type="button"
+                onClick={() => fillDemoCredentials("user")}
+                className="btn btn-outline btn-sm"
+              >
+                User
               </button>
             </div>
-          </fieldset>
-        </form>
-        <p className="text-center text-base">or</p>
-        <div className="flex flex-col items-center">
+          </div>
+
+          {/* LOGIN BUTTON */}
           <button
-            onClick={googleSignInHandler}
-            className="flex items-center justify-center gap-1 cursor-pointer active:scale-98  w-full btn bg-gray-200"
+            type="submit"
+            className="btn btn-primary w-full mt-5 text-black"
           >
-            <FcGoogle size={16} /> <span>Login with Google</span>
+            Login
           </button>
+        </form>
+
+        {/* FORGOT PASSWORD */}
+        <div className="mt-3 text-center">
+          <Link state={emailValue} to="/reset-password" className="link">
+            Forgot password?
+          </Link>
         </div>
-        <p className="mt-2 text-center text-base">
-          Don't have an account?{" "}
-          <Link
-            state={location.state}
-            to="/register"
-            className="hover:underline font-semibold "
-          >
+
+        {/* GOOGLE LOGIN */}
+        <div className="divider">OR</div>
+        <button
+          onClick={googleSignInHandler}
+          className="btn bg-gray-200 w-full text-black flex items-center gap-2"
+        >
+          <FcGoogle size={18} /> Login with Google
+        </button>
+
+        {/* REGISTER */}
+        <p className="text-center mt-3">
+          Don&apos;t have an account?{" "}
+          <Link to="/register" className="font-semibold underline">
             Register
           </Link>
         </p>

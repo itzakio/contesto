@@ -30,12 +30,16 @@ import UpdateProfile from "../DashBoard/DashboardHome/UpdateProfile";
 import MyWiningContests from "../DashBoard/UserDashboard/MyWiningContests";
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
 import ErrorPage from "../Components/ErrorPage";
+import HelpCenter from "../pages/HelpCenter/HelpCenter";
+import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
+import RefundPolicy from "../pages/RefundPolicy/RefundPolicy";
+import Contact from "../pages/Contact/Contact";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    errorElement: <ErrorPage/>,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -52,26 +56,16 @@ const router = createBrowserRouter([
       {
         path: "be-a-creator",
         element: (
-          <UserRoute>
-            <BeACreator />
-          </UserRoute>
-        ),
-      },
-      {
-        path: "/contests-details/:id",
-        element: (
           <PrivateRoute>
-            <ContestDetails />
+            <UserRoute>
+              <BeACreator />
+            </UserRoute>
           </PrivateRoute>
         ),
       },
       {
-        path: "create-contest",
-        element: (
-          <CreatorRoute>
-            <CreateContest />
-          </CreatorRoute>
-        ),
+        path: "/contests-details/:id",
+        element: <ContestDetails />,
       },
       {
         path: "edit-contest/:id",
@@ -88,6 +82,22 @@ const router = createBrowserRouter([
       {
         path: "how-it-works",
         element: <HowItWorks />,
+      },
+      {
+        path: "help-center",
+        element: <HelpCenter />,
+      },
+      {
+        path: "terms&conditions",
+        element: <TermsAndConditions />,
+      },
+      {
+        path: "refund",
+        element: <RefundPolicy />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
       },
     ],
   },
@@ -107,11 +117,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: (
-        <DashboardLayout />
-    ),
+    element: <DashboardLayout />,
     children: [
-      
       {
         index: true,
         element: (
@@ -178,6 +185,14 @@ const router = createBrowserRouter([
           </CreatorRoute>
         ),
       },
+      {
+        path: "create-contest",
+        element: (
+          <CreatorRoute>
+            <CreateContest />
+          </CreatorRoute>
+        ),
+      },
       // user only route
       {
         path: "my-joined-contests",
@@ -207,8 +222,8 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <ErrorPage/>
-  }
+    element: <ErrorPage />,
+  },
 ]);
 
 export default router;

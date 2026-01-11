@@ -2,9 +2,9 @@ import React from "react";
 
 const HowItWorks = () => {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16">
+    <div className="max-w-[1440px] mx-auto px-4 py-16">
       {/* Header */}
-      <div className="text-center mb-16" data-aos="fade-up">
+      <div className="text-center mb-16" >
         <h1 className="text-3xl md:text-4xl font-bold text-primary">
           How It Works
         </h1>
@@ -17,7 +17,6 @@ const HowItWorks = () => {
       <section className="mb-20">
         <h2
           className="text-2xl font-semibold mb-8"
-          data-aos="fade-up"
         >
           👤 For Participants
         </h2>
@@ -34,8 +33,6 @@ const HowItWorks = () => {
             <div
               key={i}
               className="card bg-base-100 shadow-md"
-              data-aos="fade-up"
-              data-aos-delay={i * 100}
             >
               <div className="card-body">
                 <div className="text-4xl">{icon}</div>
@@ -51,7 +48,6 @@ const HowItWorks = () => {
       <section>
         <h2
           className="text-2xl font-semibold mb-8"
-          data-aos="fade-up"
         >
           🎨 For Creators
         </h2>
@@ -68,8 +64,6 @@ const HowItWorks = () => {
             <div
               key={i}
               className="card bg-base-100 shadow-md"
-              data-aos="fade-up"
-              data-aos-delay={i * 100}
             >
               <div className="card-body">
                 <div className="text-4xl">{icon}</div>

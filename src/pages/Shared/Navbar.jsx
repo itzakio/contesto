@@ -26,18 +26,18 @@ const Navbar = () => {
     setTheme(checked ? "dark" : "light");
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY > 0) {
+  //       setIsSticky(true);
+  //     } else {
+  //       setIsSticky(false);
+  //     }
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
   const links = (
     <>
@@ -57,13 +57,13 @@ const Navbar = () => {
         </NavLink>
       )}
 
-      {role?.role === "creator" && (
+      {/* {role?.role === "creator" && (
         <>
           <NavLink className="nav-links" to="/create-contest">
             Create Contest
           </NavLink>
         </>
-      )}
+      )} */}
 
       <NavLink className="nav-links" to="/how-it-works">
         How It Works
@@ -78,11 +78,12 @@ const Navbar = () => {
   );
   return (
     <nav
-      className={`transition-all duration-300 z-999 shadow ${
-        isSticky
-          ? "fixed top-0 left-0 w-full backdrop-blur-xs bg-base-100/1 shadow-md"
-          : "relative bg-base-100"
-      }`}
+      // className={`transition-all duration-300 z-999 shadow ${
+      //   isSticky
+      //     ? "fixed top-0 left-0 w-full backdrop-blur-xs bg-base-100/1 shadow-md"
+      //     : "relative bg-base-100"
+      // }`}
+      className="fixed top-0 left-0 w-full backdrop-blur-xs bg-base-100/1 shadow-md z-999"
     >
       <div className="navbar z-999  max-w-[1440px] mx-auto px-4 ">
         <div className="navbar-start">

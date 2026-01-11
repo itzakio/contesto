@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router";
 
 const PopularContests = () => {
   const axiosInstance = useAxios();
-const location = useLocation();
+  const location = useLocation();
 
   const { data: contests = [], isLoading } = useQuery({
     queryKey: ["popular-contests"],
@@ -15,6 +15,8 @@ const location = useLocation();
       return res.data;
     },
   });
+
+
 
   if (isLoading) return <Loading />;
 
@@ -31,17 +33,21 @@ const location = useLocation();
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-4">
           {contests.map((contest, index) => (
-            <ContestCard
-            state={location.pathname}
-              key={contest._id}
-              contest={contest}
-              index={index}
-            />
+            <div >
+              <ContestCard
+                state={location.pathname}
+                key={contest._id}
+                contest={contest}
+                index={index}
+              />
+            </div>
           ))}
         </div>
       )}
       <div className=" mt-8 lg:mt-16 flex justify-center">
-        <Link  className="btn btn-primary text-black" to='/all-contests'>Show All</Link>
+        <Link className="btn btn-primary text-black" to="/all-contests">
+          Show All
+        </Link>
       </div>
     </section>
   );

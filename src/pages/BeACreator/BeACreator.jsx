@@ -53,7 +53,7 @@ const BeACreator = () => {
 
   return (
     <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2">
-      <div data-aos="fade-right">
+      <div >
         <div className="card w-full max-w-sm mx-auto mt-10 ">
           <div className="card-body">
             <h2 className="text-4xl font-extrabold mb-2 text-primary">
@@ -204,7 +204,7 @@ const BeACreator = () => {
           </div>
         </div>
       </div>
-      <div data-aos="fade-left">
+      <div >
         <Lottie
           animationData={creatorAnimation} // Pass the imported JSON data
           loop={true} // Control looping

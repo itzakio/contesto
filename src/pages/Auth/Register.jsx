@@ -14,7 +14,7 @@ const Register = () => {
   const { registerUser, userProfileUpdate, googleSignIn, setUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const {
     register,
     formState: { errors },
@@ -200,7 +200,7 @@ const axiosSecure = useAxiosSecure();
               <Link>Forgot password?</Link>
             </div>
             <div className="flex flex-col items-center">
-              <button type="submit" className="btn bg-primary w-full">
+              <button type="submit" className="btn bg-primary w-full text-black">
                 Register
               </button>
             </div>
@@ -210,7 +210,7 @@ const axiosSecure = useAxiosSecure();
         <div className="flex flex-col items-center">
           <button
             onClick={googleSignInHandler}
-            className="flex items-center justify-center gap-1 cursor-pointer active:scale-98  w-full btn bg-gray-200"
+            className="flex items-center justify-center gap-1 cursor-pointer active:scale-98 text-black w-full btn bg-gray-200"
           >
             <FcGoogle size={16} /> <span>Register with Google</span>
           </button>

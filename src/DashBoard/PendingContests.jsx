@@ -64,6 +64,8 @@ const PendingContests = () => {
     });
   };
 
+  
+
   return (
     <div>
       <div className="flex items-center justify-between p-4">
@@ -117,7 +119,7 @@ const PendingContests = () => {
               </tr>
             </thead>
             <tbody>
-              {contests.map((contest, index) => (
+              {contests?.map((contest, index) => (
                 <tr key={contest?._id}>
                   <td>{index + 1}</td>
                   <td>

@@ -2,9 +2,9 @@ import React from "react";
 
 const AboutUs = () => {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16">
+    <div className="max-w-[1440px] mx-auto px-4 py-16">
       {/* Header */}
-      <div className="text-center mb-16" data-aos="fade-up">
+      <div className="text-center mb-16" >
         <h1 className="text-3xl md:text-4xl font-bold text-primary">
           About Us
         </h1>
@@ -14,7 +14,7 @@ const AboutUs = () => {
       </div>
 
       {/* Who We Are */}
-      <div className="card bg-base-100 shadow-md mb-10" data-aos="fade-up">
+      <div className="card bg-base-100 shadow-md mb-10" >
         <div className="card-body">
           <h2 className="card-title">🌍 Who We Are</h2>
           <p className="text-gray-600">
@@ -33,8 +33,7 @@ const AboutUs = () => {
           <div
             key={i}
             className="card bg-base-100 shadow-md"
-            data-aos="fade-up"
-            data-aos-delay={i * 100}
+
           >
             <div className="card-body">
               <h2 className="card-title">{title}</h2>
@@ -47,7 +46,6 @@ const AboutUs = () => {
       {/* Why Choose Us */}
       <h2
         className="text-2xl font-semibold mb-6 text-center"
-        data-aos="fade-up"
       >
         Why Choose Us?
       </h2>
@@ -66,8 +64,7 @@ const AboutUs = () => {
           <div
             key={i}
             className="card bg-base-100 shadow-md text-center"
-            data-aos="fade-up"
-            data-aos-delay={i * 80}
+          
           >
             <div className="card-body">
               <p className="font-medium">{item}</p>

@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import CountdownTimer from "../../Components/CountdownTimer";
@@ -8,15 +8,18 @@ import useAuth from "../../hooks/useAuth";
 import SubmissionForm from "./SubmissionForm";
 import { FaArrowLeft } from "react-icons/fa";
 import useRole from "../../hooks/useRole";
+import useAxios from "../../hooks/useAxios";
+import toast from "react-hot-toast";
 
 const ContestDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
+  const axiosInstance = useAxios()
   const { user, userLoading } = useAuth();
   const location = useLocation();
   const role = useRole();
 
-  console.log(role)
+
   const {
     data: contest = {},
     isLoading,
@@ -24,7 +27,7 @@ const ContestDetails = () => {
   } = useQuery({
     queryKey: ["contest", id],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/contests/${id}`);
+      const res = await axiosInstance.get(`/contests/${id}`);
       return res.data;
     },
     enabled: !!id,
@@ -33,7 +36,7 @@ const ContestDetails = () => {
   const { data: paymentInfo } = useQuery({
     queryKey: ["payment-status", id],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/payments/check/${id}`);
+      const res = await axiosInstance.get(`/payments/check/${id}`);
       return res.data;
     },
     enabled: !!id,
@@ -45,7 +48,7 @@ const ContestDetails = () => {
  const { data:Pcount, isLoading:paymentLoading } = useQuery({
   queryKey: ["participants-count", contest._id],
   queryFn: async () => {
-    const res = await axiosSecure.get(
+    const res = await axiosInstance.get(
       `/contests/${contest._id}/participants-count`
     );
     return res.data;
@@ -71,6 +74,10 @@ const participantCount = Pcount?.count || 0;
 
   const paymentHandler = async () => {
     try {
+      if(!user){
+        toast.error("Please login to participate in this contest");
+        return;
+      }
       const paymentInfo = {
         entryFee,
         contestId: contest._id,
@@ -93,7 +100,7 @@ const participantCount = Pcount?.count || 0;
 
 
 
-  if (isLoading || paymentLoading || userLoading) {
+  if (isLoading || paymentLoading ) {
     return <Loading />;
   }
 
@@ -156,7 +163,7 @@ const participantCount = Pcount?.count || 0;
             </p>
           )}
         </div>
-        <p className="mt-4 text-accent col-span-full">{description}</p>
+        <p className="mt-4 text-accent col-span-full whitespace-pre-line">{description}</p>
       </div>
 
       {/* SUBMISSION FORM */}

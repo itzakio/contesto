@@ -87,7 +87,7 @@ export default function CreateContest() {
   };
 
   return (
-    <div data-aos="fade-up" data-aos-delay="0" className="card w-full max-w-lg mx-auto margin-y">
+    <div d className="card w-full max-w-lg mx-auto margin-y">
       <div className="card-body">
         <h2 className="text-3xl font-extrabold">Post a Contest</h2>
 

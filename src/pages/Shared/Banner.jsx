@@ -1,14 +1,43 @@
-import React from "react";
+import { useEffect, useRef, useState } from "react";
 import { GridScan } from "../../Components/GridScan";
 
 const Banner = () => {
+  const bannerRef = useRef(null);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // pause when NOT visible
+        setPaused(!entry.isIntersecting);
+      },
+      {
+        root: null,
+        threshold: 0.15, // 15% visible = active
+      }
+    );
+
+    if (bannerRef.current) observer.observe(bannerRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+  const onVisibilityChange = () => {
+    setPaused(document.hidden);
+  };
+
+  document.addEventListener("visibilitychange", onVisibilityChange);
+  return () =>
+    document.removeEventListener("visibilitychange", onVisibilityChange);
+}, []);
+
+
   return (
-    <div className="w-full bg-[#1a1b1f] ">
-      <div
-      className="w-full h-96  md:h-68 lg:h-[400px] xl:h-[600px] relative"
-      //  style={{ width: "100%", height: "600px", position: "relative" }}
-       >
+    <div ref={bannerRef} className="w-full bg-[#1a1b1f]">
+      <div className="w-full h-96 lg:h-[400px] xl:h-[600px] relative">
         <GridScan
+          paused={paused}
           sensitivity={0.55}
           lineThickness={1}
           linesColor="#392e4e"

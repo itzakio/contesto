@@ -3,10 +3,12 @@ import Banner from "../Shared/Banner";
 import TextPressure from "../../Components/TextPressure";
 import logo from "/logo.png";
 import PopularContests from "../Shared/PopularContests";
-import FullSearchModal from "../../Components/FullSearchModal";
 import WinnerAdvertisement from "../Shared/WinnerAdvertisement";
-import ErrorPage from "../../Components/ErrorPage";
+import FullSearchModal from "../../Components/FullSearchModal";
 import WhyJoinUs from "../Shared/WhyJoinUs";
+import FAQ from "../Shared/FAQ";
+import JudgingCriteria from "../Shared/JudgingCriteria";
+import Testimonials from "../Shared/Testimonials";
 
 const Home = () => {
   const [openSearch, setOpenSearch] = useState(false);
@@ -46,27 +48,11 @@ const Home = () => {
           src={logo}
           alt="logo"
         />
-        <p
-          data-aos="fade-up"
-          data-aos-delay="0"
-          className="text-base lg:text-2xl xl:text-3xl font-semibold text-white"
-        >
-          Challenge{" "}
-          <span data-aos="fade-up" data-aos-delay="150">
-            the
-          </span>{" "}
-          <span data-aos="fade-up" data-aos-delay="300">
-            Limits
-          </span>{" "}
-          <span data-aos="fade-up" data-aos-delay="450">
-            of
-          </span>{" "}
-          <span data-aos="fade-up" data-aos-delay="600">
-            Creativity.
-          </span>
+        <p className="text-base lg:text-2xl xl:text-3xl font-semibold text-white">
+          Challenge <span>the</span> <span>Limits</span> <span>of</span>{" "}
+          <span>Creativity.</span>
         </p>
         <div
-        data-aos="fade-up" data-aos-delay="750"
           className="mt-8 cursor-pointer"
           onClick={() => setOpenSearch(true)}
         >
@@ -88,9 +74,12 @@ const Home = () => {
           </form>
         </div>
       </div>
-      <WhyJoinUs/>
+      <WhyJoinUs />
       <PopularContests />
-      <WinnerAdvertisement/>
+      <WinnerAdvertisement />
+      <JudgingCriteria />
+      <Testimonials />
+      <FAQ />
       <FullSearchModal open={openSearch} onClose={() => setOpenSearch(false)} />
     </div>
   );

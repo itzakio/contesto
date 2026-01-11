@@ -132,7 +132,7 @@ const UpdateProfile = () => {
               type="text"
               className="input w-full text-base placeholder:text-accent"
               placeholder="Enter Your Address"
-              defaultValue={user.address}
+              defaultValue={user?.address}
             />
 
             {/* bio */}
@@ -142,7 +142,7 @@ const UpdateProfile = () => {
               type="text"
               className="input w-full h-20 text-base placeholder:text-accent"
               placeholder="Write something about yourself!"
-              defaultValue={user.bio}
+              defaultValue={user?.bio}
             />
 
             {errors?.password && (
