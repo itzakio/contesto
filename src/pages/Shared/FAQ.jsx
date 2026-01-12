@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const faqData = [
   {
     id: 1,
@@ -63,9 +65,9 @@ const FAQ = () => {
       <div className="text-center mt-16">
         <h3 className="text-2xl font-semibold">Still have questions?</h3>
        
-        <a href="#" className="btn btn-primary text-black mt-6">
+        <Link to="/contact" className="btn btn-primary text-black mt-6">
           Contact Support
-        </a>
+        </Link>
       </div>
     </section>
   );
