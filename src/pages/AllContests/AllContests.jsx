@@ -23,16 +23,31 @@ const AllContests = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category") || "All";
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
-  const { data: contests = [], isLoading } = useQuery({
-    queryKey: ["all-contests", activeCategory, category],
+  const { data, isLoading } = useQuery({
+    queryKey: ["all-contests", activeCategory, currentPage],
     queryFn: async () => {
       const res = await axiosInstance.get("/contests", {
-        params: { category: activeCategory },
+        params: {
+          category: activeCategory,
+          page: currentPage,
+          limit: itemsPerPage,
+        },
       });
       return res.data;
     },
+    keepPreviousData: true, // 🔥 smooth pagination
   });
+
+  const contests = data?.contests || [];
+  const totalPages = data?.totalPages || 1;
+
+  const handleCategoryChange = (cat) => {
+    setActiveCategory(cat);
+    setCurrentPage(1);
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -51,7 +66,7 @@ const AllContests = () => {
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => handleCategoryChange(cat)}
                 className={`tab whitespace-nowrap transition-all duration-300 ease-in-out ${
                   activeCategory === cat
                     ? "tab-active bg-primary text-black scale-105"
@@ -90,6 +105,41 @@ const AllContests = () => {
           ))}
         </div>
       )}
+      <div>
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-12">
+            <div className="join">
+              <button
+                className="join-item btn"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                «
+              </button>
+
+              {[...Array(totalPages).keys()].map((page) => (
+                <button
+                  key={page}
+                  className={`join-item btn ${
+                    currentPage === page + 1 ? "btn-primary" : ""
+                  }`}
+                  onClick={() => setCurrentPage(page + 1)}
+                >
+                  {page + 1}
+                </button>
+              ))}
+
+              <button
+                className="join-item btn"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                »
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

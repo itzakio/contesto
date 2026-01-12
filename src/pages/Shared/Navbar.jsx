@@ -4,8 +4,8 @@ import { RiMenuFill } from "react-icons/ri";
 import { Link, NavLink } from "react-router";
 import logo from "/logo.png";
 import { RxCrossCircled } from "react-icons/rx";
-import useAuth from "../../hooks/useAuth";
 import useRole from "../../hooks/useRole";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
   const { user, logOutUser } = useAuth();
@@ -51,7 +51,7 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/leaderboard">
         Leaderboard
       </NavLink>
-      {role?.role === "user" && (
+      {role?.role === "user" && user && (
         <NavLink className="nav-links" to="/be-a-creator">
           Be A Creator
         </NavLink>
@@ -71,9 +71,11 @@ const Navbar = () => {
       <NavLink className="nav-links" to="/about-us">
         About Us
       </NavLink>
-      <NavLink className="nav-links" to="/dashboard">
-        Dashboard
-      </NavLink>
+      {user && (
+        <NavLink className="nav-links" to="/dashboard">
+          Dashboard
+        </NavLink>
+      )}
     </>
   );
   return (

@@ -57,9 +57,7 @@ const router = createBrowserRouter([
         path: "be-a-creator",
         element: (
           <PrivateRoute>
-            <UserRoute>
-              <BeACreator />
-            </UserRoute>
+            <BeACreator />
           </PrivateRoute>
         ),
       },
